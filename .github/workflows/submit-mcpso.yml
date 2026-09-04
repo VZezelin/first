@@ -1,0 +1,27 @@
+name: Submit Signal Lab to mcp.so
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-mcpso.yml"
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Submit public repository to mcp.so
+        run: |
+          set -euo pipefail
+          response_file="$(mktemp)"
+          status="$(curl -sS -o "$response_file" -w '%{http_code}' \
+            -X POST 'https://mcp.so/api/submit-project' \
+            -H 'Content-Type: application/json' \
+            --data-binary '{"url":"https://github.com/VZezelin/first","avatar_url":""}')"
+          echo "MCPSO_HTTP=$status"
+          cat "$response_file"
+          echo
+          test "$status" = "200"
