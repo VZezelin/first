@@ -16,6 +16,7 @@ on:
       - youtube-transcript-api.html
       - reddit-scraper-api.md
       - job-posting-scraper-api.md
+      - job-posting-scraper-api.html
       - restaurant-menu-scraper-api.md
       - 6a5d3b460defd21d6d46f5741c7e3de0.txt
       - .github/workflows/indexnow.yml
@@ -61,7 +62,7 @@ jobs:
               "https://first-livid-omega.vercel.app/website-to-markdown-api.html",
               "https://first-livid-omega.vercel.app/youtube-transcript-api.html",
               "https://first-livid-omega.vercel.app/reddit-scraper-api.md",
-              "https://first-livid-omega.vercel.app/job-posting-scraper-api.md",
+              "https://first-livid-omega.vercel.app/job-posting-scraper-api.html",
               "https://first-livid-omega.vercel.app/restaurant-menu-scraper-api.md"
             ]
           }
