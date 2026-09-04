@@ -9,6 +9,11 @@
       "source": "/website-to-markdown-api.md",
       "destination": "/website-to-markdown-api.html",
       "permanent": true
+    },
+    {
+      "source": "/job-posting-scraper-api.md",
+      "destination": "/job-posting-scraper-api.html",
+      "permanent": true
     }
   ],
   "headers": [
@@ -36,6 +41,15 @@
         {
           "key": "Link",
           "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", <https://raw.githubusercontent.com/VZezelin/first/main/website-to-markdown-api.md>; rel=\"alternate\"; type=\"text/markdown\""
+        }
+      ]
+    },
+    {
+      "source": "/job-posting-scraper-api.html",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", <https://raw.githubusercontent.com/VZezelin/first/main/job-posting-scraper-api.md>; rel=\"alternate\"; type=\"text/markdown\""
         }
       ]
     }
