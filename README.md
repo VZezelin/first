@@ -8,6 +8,7 @@ Small copy-paste examples for public **Signal Lab** Actors on the Apify Store. T
 
 - [Amazon Price Tracker API — ASIN monitoring and price-drop alerts](./amazon-price-tracker-api.md)
 - [Google Autocomplete API — buyer-intent keyword research](./google-autocomplete-api.md)
+- [Website to Markdown API — clean RAG and LLM ingestion](./website-to-markdown-api.md)
 - [Job Posting Scraper API — title, salary, company, and location](./job-posting-scraper-api.md)
 - [Restaurant Menu Scraper API — items, prices, sections, and descriptions](./restaurant-menu-scraper-api.md)
 
