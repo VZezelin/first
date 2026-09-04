@@ -1,0 +1,30 @@
+name: Submit Signal Lab MCP to ServerHub
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-serverhub.yml"
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Submit public GitHub repository
+        run: |
+          set -euo pipefail
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            -X POST \
+            -H 'Content-Type: application/json' \
+            --data '{"githubUrl":"https://github.com/VZezelin/first"}' \
+            https://www.serverhub.digital/api/submit)"
+          cat "$response_file"
+          echo
+          echo "HTTP_STATUS=$status"
+          test "$status" -ge 200 -a "$status" -lt 300
