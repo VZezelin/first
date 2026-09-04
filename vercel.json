@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/youtube-transcript-api.md",
+      "destination": "/youtube-transcript-api.html",
+      "permanent": true
+    }
+  ]
+}
