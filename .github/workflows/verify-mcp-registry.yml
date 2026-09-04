@@ -1,0 +1,34 @@
+name: Verify Signal Lab MCP Registry Listing
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/verify-mcp-registry.yml"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Verify exact server in production registry API
+        env:
+          SERVER_NAME: io.github.VZezelin/signal-lab-apify-tools
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error --get \
+            --data-urlencode "search=${SERVER_NAME}" \
+            "https://registry.modelcontextprotocol.io/v0.1/servers")"
+          printf '%s\n' "$response" | jq -e --arg name "$SERVER_NAME" '
+            any(.servers[]?; ((.server.name // .name) == $name))
+          '
+          printf '%s\n' "$response" | jq --arg name "$SERVER_NAME" '
+            [.servers[]? | select((.server.name // .name) == $name) | {
+              name: (.server.name // .name),
+              version: (.server.version // .version),
+              description: (.server.description // .description),
+              remotes: (.server.remotes // .remotes)
+            }]
+          '
