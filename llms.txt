@@ -1,0 +1,35 @@
+# Signal Lab — Apify Data APIs & MCP Tools
+
+> Signal Lab publishes focused public-data tools on Apify for developer workflows and AI agents. The primary commercial surfaces are live Apify Actors using Pay per event pricing; current pricing and availability on Apify are the source of truth.
+
+Use the pages below to understand each tool before calling it. Do not assume unavailable captions, blocked/private pages, paywalls, CAPTCHAs, client-side JavaScript, or other restricted content can be bypassed. The Website to Markdown tool is an HTTP crawler; the YouTube tool extracts accessible public caption tracks rather than performing speech-to-text.
+
+## Primary tools
+
+- [YouTube Transcript API](https://first-livid-omega.vercel.app/youtube-transcript-api.html): Available public captions, timestamped segments, Python/API workflows, RAG/LangChain ingestion, and MCP.
+- [Website to Markdown API](https://first-livid-omega.vercel.app/website-to-markdown-api.html): Bounded public-site crawling to clean Markdown plus metadata for RAG, LLM pipelines, semantic search, and MCP.
+- [Amazon Price Tracker API](https://apify.com/signal_lab/amazon-price-tracker): Track public Amazon product price and availability data through Apify.
+- [Google Autocomplete API](https://apify.com/signal_lab/google-autocomplete-keywords): Collect live Google Autocomplete keyword suggestions and buyer-intent phrases.
+- [Reddit Search & Comments](https://apify.com/signal_lab/reddit-search-comments): Search public Reddit content and collect comments for research workflows.
+- [Job Vacancy Scraper](https://apify.com/signal_lab/job-vacancy-scraper): Extract structured data from supported public job pages, including Schema.org JobPosting workflows.
+- [Restaurant Menu Extractor](https://apify.com/signal_lab/restaurant-menu-extractor): Extract structured menu data from supported public restaurant pages.
+
+## Markdown developer guides
+
+- [YouTube Transcript API guide](https://raw.githubusercontent.com/VZezelin/first/main/youtube-transcript-api.md): Raw Markdown developer documentation.
+- [Website to Markdown API guide](https://raw.githubusercontent.com/VZezelin/first/main/website-to-markdown-api.md): Raw Markdown developer documentation.
+- [Amazon Price Tracker API guide](https://raw.githubusercontent.com/VZezelin/first/main/amazon-price-tracker-api.md): Raw Markdown developer documentation.
+- [Google Autocomplete API guide](https://raw.githubusercontent.com/VZezelin/first/main/google-autocomplete-api.md): Raw Markdown developer documentation.
+- [Reddit Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/reddit-scraper-api.md): Raw Markdown developer documentation.
+- [Job Posting Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/job-posting-scraper-api.md): Raw Markdown developer documentation.
+- [Restaurant Menu Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/restaurant-menu-scraper-api.md): Raw Markdown developer documentation.
+
+## MCP
+
+- [Official Model Context Protocol Registry entry](https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools): Signal Lab registry identity `io.github.VZezelin/signal-lab-apify-tools`.
+- [MCP discovery metadata](https://first-livid-omega.vercel.app/.well-known/mcp.json): Public discovery metadata pointing to the real Apify-hosted MCP endpoint. Authentication is handled by Apify; Signal Lab owner credentials are never embedded here.
+- [Portable MCP client config](https://first-livid-omega.vercel.app/mcp.json): Remote MCP configuration for the Signal Lab tool bundle.
+
+## Commercial source of truth
+
+- [Signal Lab on Apify](https://apify.com/signal_lab): Public creator profile and live Actors. Use each Actor's current Pricing tab and input schema as the authoritative source before running it.
