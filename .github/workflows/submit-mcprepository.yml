@@ -1,0 +1,20 @@
+name: Submit Signal Lab to MCPRepository
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-mcprepository.yml"
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Submit repository for MCP indexing
+        run: |
+          set -euo pipefail
+          npx --yes mcp-index https://github.com/VZezelin/first 2>&1 | tee /tmp/mcp-index.log
+          grep -Eq 'Index request submitted successfully|already|duplicate|queued' /tmp/mcp-index.log
