@@ -1,6 +1,22 @@
-# Signal Lab — Apify API examples for price tracking, keyword research, RAG, transcripts, jobs, menus, and Reddit
+# Signal Lab — MCP Server + Apify Data APIs
 
-Small copy-paste examples for public **Signal Lab** Actors on the Apify Store. The goal is to make common automation jobs easy to test from the Store, Apify API, schedules, webhooks, Make, n8n, or MCP.
+Developer-first **Apify Actors and MCP tools** for Amazon price tracking, Google Autocomplete, website-to-Markdown/RAG, YouTube transcripts, Reddit search/comments, public job postings, and restaurant menus.
+
+## Start here
+
+| Need | Run now | API guide |
+|---|---|---|
+| Track an Amazon ASIN / price drop | [Run Amazon Price Tracker on Apify](https://apify.com/signal_lab/amazon-price-tracker) | [Amazon Price Tracker API](./amazon-price-tracker-api.md) |
+| Get Google Autocomplete buyer-intent keywords | [Run Google Autocomplete API on Apify](https://apify.com/signal_lab/google-autocomplete-keywords) | [Google Autocomplete API](./google-autocomplete-api.md) |
+| Convert a website to Markdown for RAG/LLMs | [Run Website to Markdown on Apify](https://apify.com/signal_lab/website-to-markdown-crawler) | [Website to Markdown API](./website-to-markdown-api.md) |
+| Get a YouTube transcript with timestamps | [Run YouTube Transcript Scraper on Apify](https://apify.com/signal_lab/youtube-transcript-scraper) | Use the live Store input schema |
+| Search Reddit posts and comments | [Run Reddit Scraper API on Apify](https://apify.com/signal_lab/reddit-search-comments) | [Reddit Scraper API](./reddit-scraper-api.md) |
+| Extract a public job posting | [Run Job Vacancy Scraper on Apify](https://apify.com/signal_lab/job-vacancy-scraper) | [Job Posting Scraper API](./job-posting-scraper-api.md) |
+| Extract restaurant menu items and prices | [Run Restaurant Menu Extractor on Apify](https://apify.com/signal_lab/restaurant-menu-extractor) | [Restaurant Menu Scraper API](./restaurant-menu-scraper-api.md) |
+
+**No code:** open any Actor above, enter the input, and click **Start**.  
+**API:** use the copy-paste examples below.  
+**AI agent / MCP:** connect the single remote endpoint below and choose the tool you need.
 
 > Pricing can change. Use each Actor's live **Pricing** tab in Apify as the source of truth.
 
@@ -12,7 +28,7 @@ Signal Lab is published in the **Official Model Context Protocol Registry** as:
 
 Registry search: https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools
 
-The registered remote uses Apify's hosted Streamable HTTP MCP endpoint and exposes a focused set of Signal Lab tools for Amazon price tracking, Google Autocomplete keywords, website-to-Markdown/RAG, YouTube transcripts, Reddit search/comments, public job postings, and restaurant menus.
+The registered remote uses Apify's hosted Streamable HTTP MCP endpoint and exposes a focused set of Signal Lab tools:
 
 ```json
 {
@@ -37,7 +53,7 @@ Apify handles the MCP connection and authentication flow. Actor pricing remains 
 
 ## 1. Amazon Price Tracker API — track an ASIN and build price-drop alerts
 
-**Actor:** https://apify.com/signal_lab/amazon-price-tracker
+**Run in Store:** https://apify.com/signal_lab/amazon-price-tracker
 
 Useful for:
 - Amazon price tracking by ASIN/product URL
@@ -64,7 +80,7 @@ For alerts, run it on an Apify schedule and connect a webhook/Make/n8n flow to t
 
 ## 2. Google Autocomplete API — buyer-intent keyword suggestions
 
-**Actor:** https://apify.com/signal_lab/google-autocomplete-keywords
+**Run in Store:** https://apify.com/signal_lab/google-autocomplete-keywords
 
 Useful for:
 - Google Autocomplete keyword research
@@ -89,7 +105,7 @@ curl -X POST \
 
 ## 3. Website to Markdown API — clean pages for RAG and LLM ingestion
 
-**Actor:** https://apify.com/signal_lab/website-to-markdown-crawler
+**Run in Store:** https://apify.com/signal_lab/website-to-markdown-crawler
 
 Useful for:
 - website-to-Markdown conversion
@@ -114,7 +130,7 @@ curl -X POST \
 
 ## 4. YouTube Transcript API — captions, timestamps, and metadata
 
-**Actor:** https://apify.com/signal_lab/youtube-transcript-scraper
+**Run in Store:** https://apify.com/signal_lab/youtube-transcript-scraper
 
 Useful for:
 - public YouTube transcripts
