@@ -25,20 +25,27 @@ jobs:
           )
           for q in "${queries[@]}"; do
             echo "===== QUERY: $q ====="
+            limit=20
+            if [ "$q" = "reddit scraper api" ]; then limit=100; fi
             response="$(curl --fail --silent --show-error -G 'https://api.apify.com/v2/store' \
               --data-urlencode "search=$q" \
               --data 'allowsAgenticUsers=true' \
-              --data 'limit=20' \
+              --data "limit=$limit" \
               --data 'responseFormat=agent')"
             echo "$response" | jq -r '
               (.data.items // .items // [])
               | to_entries[]
-              | "rank=\(.key + 1) actor=\(.value.username)/\(.value.name) title=\(.value.title // "")"'
+              | select(.key < 20 or .value.username == "signal_lab")
+              | "rank=\(.key + 1) actor=\(.value.username)/\(.value.name) title=\(.value.title // "") users30d=\(.value.stats.totalUsers30Days // .value.stats.totalUsers30d // .value.totalUsers30Days // "na") runs30d=\(.value.stats.publicActorRunStats30Days.TOTAL // .value.publicActorRunStats30Days.TOTAL // "na") score=\(.value.qualityScore // .value.actorQualityScore // "na") rating=\(.value.stats.actorReviewRating // .value.actorReviewRating // "na")"'
             rank="$(echo "$response" | jq -r '
               (.data.items // .items // [])
               | to_entries
               | map(select(.value.username == "signal_lab"))
               | if length == 0 then "NOT_FOUND" else (map(.key + 1) | join(",")) end')"
             echo "SIGNAL_LAB_RANK=$rank"
+            if [ "$q" = "reddit scraper api" ]; then
+              echo "FIRST_ITEM_KEYS=$(echo "$response" | jq -c '(.data.items // .items // [])[0] | keys')"
+              echo "$response" | jq -c '(.data.items // .items // []) | to_entries | map(select(.value.username == "signal_lab")) | .[0].value // {}' | sed 's/^/SIGNAL_LAB_ITEM=/'
+            fi
             echo
           done
