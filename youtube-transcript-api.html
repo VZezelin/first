@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YouTube Transcript API — Python, Timestamps, RAG & MCP | Signal Lab</title>
+<meta name="description" content="YouTube Transcript API on Apify for available public captions, timestamped segments, Python workflows, RAG/LangChain pipelines, Dataset exports, and MCP.">
+<meta name="robots" content="index,follow"><link rel="canonical" href="https://first-livid-omega.vercel.app/youtube-transcript-api.html">
+<meta property="og:title" content="YouTube Transcript API — Python, Timestamps, RAG & MCP"><meta property="og:description" content="Extract available public YouTube captions and timestamps through Apify API or MCP."><meta property="og:type" content="website"><meta property="og:url" content="https://first-livid-omega.vercel.app/youtube-transcript-api.html">
+<style>
+:root{--bg:#090b10;--card:#121722;--text:#f7f9fc;--muted:#9ca9bd;--line:#222b3a;--green:#75f0b5;--blue:#72a8ff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 15% 0%,#72a8ff20,transparent 30rem),radial-gradient(circle at 85% 8%,#75f0b518,transparent 27rem),var(--bg);color:var(--text);line-height:1.65}a{color:inherit}.wrap{max-width:1040px;margin:auto;padding:0 24px}nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0}.brand{text-decoration:none;font-size:20px;font-weight:850;letter-spacing:-.04em}.brand i{font-style:normal;color:var(--green)}.navlinks{display:flex;gap:18px;color:var(--muted);font-size:14px}.navlinks a{text-decoration:none}.hero{padding:72px 0 44px;text-align:center}.pill{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#121722cc;color:#cbd5e6;font-size:13px}.pill:before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}h1{margin:22px auto 18px;max-width:900px;font-size:clamp(42px,7vw,70px);line-height:1.03;letter-spacing:-.055em}.lede{max-width:780px;margin:auto;color:var(--muted);font-size:19px}.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-block;text-decoration:none;padding:13px 18px;border:1px solid var(--line);border-radius:12px;background:#0e131c;font-size:14px;font-weight:800}.btn.primary{background:var(--green);color:#07110d;border-color:transparent}.proof{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:28px;color:#8e9aab;font-size:13px}.proof b{color:#dce5f2}.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:28px;align-items:start}.content section{padding:30px 0;border-top:1px solid var(--line)}h2{font-size:30px;letter-spacing:-.035em;margin:0 0 12px}h3{font-size:20px;margin:22px 0 8px}.content p,.content li{color:#bdc8d9}.content strong{color:var(--text)}ul,ol{padding-left:22px}.side{position:sticky;top:18px;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#121722,#0d121a)}.side .label,.label{color:var(--green);font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.12em}.side h3{margin:6px 0 8px}.side p{margin:0 0 14px;color:var(--muted);font-size:14px}.side a{display:block;text-decoration:none;margin-top:8px}.code{background:#080b10;border:1px solid var(--line);border-radius:16px;padding:18px;overflow:auto;color:#d8e2f0;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{border:1px solid var(--line);border-radius:15px;padding:18px;background:#0e131c}.card h3{margin:0 0 6px}.card p{margin:0;color:var(--muted);font-size:14px}.note{border-left:3px solid var(--blue);padding:4px 0 4px 14px;color:#b9c7db}.faq details{border-top:1px solid var(--line);padding:15px 0}.faq summary{cursor:pointer;font-weight:780}.cta{margin:32px 0 60px;text-align:center;padding:34px;border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at 50% 0%,#75f0b51f,transparent 60%),#0e131c}.cta h2{margin-bottom:8px}.cta p{color:var(--muted)}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:26px 0 38px;border-top:1px solid var(--line);color:#7f8ca0;font-size:13px}@media(max-width:800px){.layout{grid-template-columns:1fr}.side{position:static;order:-1}.grid{grid-template-columns:1fr}.navlinks{display:none}}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"YouTube Transcript API — Python, Timestamps, RAG & MCP","url":"https://first-livid-omega.vercel.app/youtube-transcript-api.html","description":"Guide to Signal Lab's YouTube Transcript API Actor on Apify for available public captions, timestamps, Python, RAG and MCP."}</script>
+</head>
+<body><div class="wrap">
+<nav><a class="brand" href="/">Signal <i>Lab</i></a><div class="navlinks"><a href="#python">Python</a><a href="#rag">RAG</a><a href="#mcp">MCP</a><a href="#faq">FAQ</a></div></nav>
+<main>
+<section class="hero"><span class="pill">YouTube Transcript API on Apify</span><h1>Public captions and timestamps.<br>API, Python, RAG, or MCP.</h1><p class="lede">Extract available public YouTube caption tracks as transcript text plus optional timestamped segments. Run in Apify Console, call the Actor API, export the Dataset, or connect it as an MCP tool for AI agents.</p><div class="actions"><a class="btn primary" href="/api/go?actor=youtube">Run YouTube Transcript API →</a><a class="btn" href="#python">See Python example</a></div><div class="proof"><span><b>Public captions</b>, not audio transcription</span><span><b>Timestamp segments</b> when available</span><span><b>Pay per event</b> on Apify</span></div></section>
+<div class="layout"><article class="content">
+<section><div class="label">What it does</div><h2>Use a hosted transcript workflow instead of maintaining your own scraper.</h2><p>The Actor accepts public YouTube watch URLs, Shorts URLs, live/embed links, <code>youtu.be</code> links, or 11-character video IDs. For videos with accessible captions it can return full transcript text, timestamped caption segments, language information, caption-track details, video metadata, and the source URL.</p><div class="grid"><div class="card"><h3>Research</h3><p>Collect transcript text for summarization, analysis, semantic search, and content indexing.</p></div><div class="card"><h3>Timestamp-aware RAG</h3><p>Preserve source timing so answers can point back to the relevant moment in a video.</p></div><div class="card"><h3>Automation</h3><p>Use Apify API, schedules, webhooks, Make/n8n, or your own orchestration.</p></div><div class="card"><h3>Dataset export</h3><p>Consume the resulting default Dataset through API or export it through Apify.</p></div></div></section>
+<section><div class="label">API example</div><h2>Start a transcript run with curl.</h2><pre class="code">curl -X POST \
+  "https://api.apify.com/v2/acts/signal_lab~youtube-transcript-scraper/runs" \
+  -H "Authorization: Bearer $APIFY_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": ["dQw4w9WgXcQ"],
+    "preferredLanguages": ["en"],
+    "preferManual": true,
+    "includeSegments": true,
+    "maxVideos": 10
+  }'</pre><p class="note">The response contains Actor run metadata. Read the run's default Dataset after completion to retrieve transcript rows.</p></section>
+<section id="python"><div class="label">Python</div><h2>YouTube Transcript API with Python.</h2><pre class="code">import os
+import requests
+
+actor = "signal_lab~youtube-transcript-scraper"
+url = f"https://api.apify.com/v2/acts/{actor}/runs"
+
+response = requests.post(
+    url,
+    headers={
+        "Authorization": f"Bearer {os.environ['APIFY_TOKEN']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "urls": ["dQw4w9WgXcQ"],
+        "preferredLanguages": ["en"],
+        "preferManual": True,
+        "includeSegments": True,
+        "maxVideos": 10,
+    },
+    timeout=30,
+)
+response.raise_for_status()
+print(response.json())</pre></section>
+<section id="rag"><div class="label">LangChain / RAG</div><h2>Use the Dataset as your ingestion layer.</h2><ol><li>Run the Actor for one or more public videos.</li><li>Fetch Dataset rows through the Apify API.</li><li>Keep transcript text, source URL, language, and timestamps.</li><li>Chunk/embed with LangChain, LlamaIndex, your vector database, or a custom RAG pipeline.</li></ol><p>No LangChain-specific adapter is required. Timestamped segments are useful when generated answers need source timing.</p></section>
+<section id="mcp"><div class="label">MCP</div><h2>Connect the YouTube Actor directly to an AI client.</h2><p>Signal Lab is published in the Official Model Context Protocol Registry as <strong>io.github.VZezelin/signal-lab-apify-tools</strong>. For a focused YouTube-only connection, use Apify's hosted MCP endpoint:</p><pre class="code">{
+  "mcpServers": {
+    "signal-lab-youtube": {
+      "url": "https://mcp.apify.com?tools=signal_lab/youtube-transcript-scraper"
+    }
+  }
+}</pre><p>Apify authentication is required. The endpoint does not embed or expose Signal Lab owner credentials.</p></section>
+<section><div class="label">Limits</div><h2>What this API does not promise.</h2><ul><li>It extracts <strong>available public caption tracks</strong>; it is not speech-to-text for videos with no accessible captions.</li><li>Caption availability can be affected by upstream YouTube behavior, language coverage, removal, regional availability, or other restrictions.</li><li>The current input schema supports bounded runs with <code>maxVideos</code>; account-level API/run concurrency and usage limits depend on Apify settings.</li><li>Pricing can change. Use the live Actor Pricing tab as the source of truth before running.</li></ul></section>
+<section id="faq" class="faq"><div class="label">Buyer questions</div><h2>Common YouTube Transcript API questions.</h2><details open><summary>Is this a free YouTube transcript API?</summary><p>The Actor uses Apify Pay per event pricing. Apify credits and plan allowances may reduce a user's out-of-pocket cost, but this page does not promise permanently free usage.</p></details><details><summary>Can I download a transcript with timestamps?</summary><p>When an accessible caption track is available, enable timestamped segments and retrieve the resulting Dataset through Apify.</p></details><details><summary>Can I use it from Python?</summary><p>Yes. Start the Actor through the Apify REST API, then fetch the default Dataset after the run finishes.</p></details><details><summary>Can I use it for LangChain or RAG?</summary><p>Yes. Use transcript rows as ingestion data and preserve source URLs and timestamps before chunking and embedding them in your preferred stack.</p></details><details><summary>Does it bypass unavailable or blocked captions?</summary><p>No. It is designed for accessible public caption tracks and does not claim to bypass YouTube restrictions.</p></details></section>
+</article><aside class="side"><div class="label">Live Actor</div><h3>YouTube Transcript API</h3><p>Captions, timestamps, language information and video metadata through Apify.</p><a class="btn primary" href="/api/go?actor=youtube">Run on Apify →</a><a class="btn" href="https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools">Official MCP Registry</a><a class="btn" href="/youtube-transcript-api.md">Raw developer guide</a></aside></div>
+<section class="cta"><div class="label">Start with a real run</div><h2>Open the live YouTube Transcript Actor.</h2><p>Inspect current input and Pricing on Apify, then run only the public videos you are authorized to process.</p><div class="actions"><a class="btn primary" href="/api/go?actor=youtube">Open on Apify →</a><a class="btn" href="/">Browse other Signal Lab APIs</a></div></section>
+</main><footer><span>Signal Lab · developer-first Apify data APIs & MCP tools</span><span>Use public content in accordance with platform terms, privacy, copyright, and applicable law.</span></footer>
+</div><script>fetch('/api/view?page=youtube',{method:'POST',keepalive:true}).catch(()=>{});</script></body></html>
