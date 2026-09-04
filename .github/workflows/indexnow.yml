@@ -7,10 +7,12 @@ on:
       - index.html
       - sitemap.xml
       - robots.txt
+      - vercel.json
       - amazon-price-tracker-api.md
       - google-autocomplete-api.md
       - website-to-markdown-api.md
       - youtube-transcript-api.md
+      - youtube-transcript-api.html
       - reddit-scraper-api.md
       - job-posting-scraper-api.md
       - restaurant-menu-scraper-api.md
@@ -56,7 +58,7 @@ jobs:
               "https://first-livid-omega.vercel.app/amazon-price-tracker-api.md",
               "https://first-livid-omega.vercel.app/google-autocomplete-api.md",
               "https://first-livid-omega.vercel.app/website-to-markdown-api.md",
-              "https://first-livid-omega.vercel.app/youtube-transcript-api.md",
+              "https://first-livid-omega.vercel.app/youtube-transcript-api.html",
               "https://first-livid-omega.vercel.app/reddit-scraper-api.md",
               "https://first-livid-omega.vercel.app/job-posting-scraper-api.md",
               "https://first-livid-omega.vercel.app/restaurant-menu-scraper-api.md"
