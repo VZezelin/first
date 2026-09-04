@@ -1,0 +1,17 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.VZezelin/signal-lab-apify-tools",
+  "title": "Signal Lab Apify Data Tools",
+  "description": "Run Signal Lab Apify Actors for price tracking, keywords, RAG, transcripts, Reddit, jobs, and menus.",
+  "repository": {
+    "url": "https://github.com/VZezelin/first",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor"
+    }
+  ]
+}
