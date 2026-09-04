@@ -20,6 +20,24 @@ Developer-first **Apify Actors and MCP tools** for Amazon price tracking, Google
 
 > Pricing can change. Use each Actor's live **Pricing** tab in Apify as the source of truth.
 
+## Install as an Agent Skill
+
+Signal Lab also ships a portable Agent Skill that teaches compatible agents when and how to route public-data work through the focused Apify Actors and Official MCP tools without embedding owner credentials.
+
+List the skill directly from this public GitHub repository:
+
+```bash
+npx skills add VZezelin/first --list
+```
+
+Install only Signal Lab for Codex:
+
+```bash
+npx skills add VZezelin/first --skill signal-lab-apify-tools -a codex -y --copy
+```
+
+The public install path has been verified from a clean workspace. The skill itself is at [`skills/signal-lab-apify-tools/SKILL.md`](./skills/signal-lab-apify-tools/SKILL.md). Installing the skill does not supply Apify credentials; paid Actor or MCP execution still uses the installer's own Apify authentication.
+
 ## Official MCP Registry
 
 Signal Lab is published in the **Official Model Context Protocol Registry** as:
