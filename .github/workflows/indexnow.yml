@@ -1,0 +1,75 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - sitemap.xml
+      - robots.txt
+      - amazon-price-tracker-api.md
+      - google-autocomplete-api.md
+      - website-to-markdown-api.md
+      - youtube-transcript-api.md
+      - reddit-scraper-api.md
+      - job-posting-scraper-api.md
+      - restaurant-menu-scraper-api.md
+      - 6a5d3b460defd21d6d46f5741c7e3de0.txt
+      - .github/workflows/indexnow.yml
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wait for production key file
+        shell: bash
+        run: |
+          set -euo pipefail
+          key='6a5d3b460defd21d6d46f5741c7e3de0'
+          url="https://first-livid-omega.vercel.app/${key}.txt"
+          for i in $(seq 1 18); do
+            body="$(curl -fsSL "$url" 2>/dev/null || true)"
+            if [ "$body" = "$key" ]; then
+              echo "IndexNow key is live"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Production key file did not become available" >&2
+          exit 1
+
+      - name: Submit buyer-intent URLs to IndexNow
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/indexnow.json <<'JSON'
+          {
+            "host": "first-livid-omega.vercel.app",
+            "key": "6a5d3b460defd21d6d46f5741c7e3de0",
+            "keyLocation": "https://first-livid-omega.vercel.app/6a5d3b460defd21d6d46f5741c7e3de0.txt",
+            "urlList": [
+              "https://first-livid-omega.vercel.app/",
+              "https://first-livid-omega.vercel.app/amazon-price-tracker-api.md",
+              "https://first-livid-omega.vercel.app/google-autocomplete-api.md",
+              "https://first-livid-omega.vercel.app/website-to-markdown-api.md",
+              "https://first-livid-omega.vercel.app/youtube-transcript-api.md",
+              "https://first-livid-omega.vercel.app/reddit-scraper-api.md",
+              "https://first-livid-omega.vercel.app/job-posting-scraper-api.md",
+              "https://first-livid-omega.vercel.app/restaurant-menu-scraper-api.md"
+            ]
+          }
+          JSON
+          status="$(curl -sS -o /tmp/indexnow-response.txt -w '%{http_code}' \
+            -X POST 'https://api.indexnow.org/indexnow' \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data-binary @/tmp/indexnow.json)"
+          echo "IndexNow HTTP $status"
+          cat /tmp/indexnow-response.txt || true
+          case "$status" in
+            200|202) exit 0 ;;
+            *) exit 1 ;;
+          esac
