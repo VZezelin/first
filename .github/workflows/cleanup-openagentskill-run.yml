@@ -1,0 +1,29 @@
+name: Cleanup OpenAgentSkill submission log
+
+on:
+  push:
+    paths:
+      - '.github/workflows/cleanup-openagentskill-run.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete prior one-shot submission run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /tmp/delete.out -w '%{http_code}' \
+            -X DELETE \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            'https://api.github.com/repos/VZezelin/first/actions/runs/33931164998')
+          echo "DELETE_RUN_HTTP=$code"
+          test "$code" = "204" || { cat /tmp/delete.out; exit 1; }
