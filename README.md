@@ -9,13 +9,13 @@ Developer-first **Apify Actors and MCP tools** for Amazon price tracking, Google
 | Track an Amazon ASIN / price drop | [Run Amazon Price Tracker on Apify](https://apify.com/signal_lab/amazon-price-tracker) | [Amazon Price Tracker API](./amazon-price-tracker-api.md) |
 | Get Google Autocomplete buyer-intent keywords | [Run Google Autocomplete API on Apify](https://apify.com/signal_lab/google-autocomplete-keywords) | [Google Autocomplete API](./google-autocomplete-api.md) |
 | Convert a website to Markdown for RAG/LLMs | [Run Website to Markdown on Apify](https://apify.com/signal_lab/website-to-markdown-crawler) | [Website to Markdown API](./website-to-markdown-api.md) |
-| Get a YouTube transcript with timestamps | [Run YouTube Transcript Scraper on Apify](https://apify.com/signal_lab/youtube-transcript-scraper) | Use the live Store input schema |
+| Get a YouTube transcript with timestamps | [Run YouTube Transcript API on Apify](https://apify.com/signal_lab/youtube-transcript-scraper) | [YouTube Transcript API](./youtube-transcript-api.md) |
 | Search Reddit posts and comments | [Run Reddit Scraper API on Apify](https://apify.com/signal_lab/reddit-search-comments) | [Reddit Scraper API](./reddit-scraper-api.md) |
 | Extract a public job posting | [Run Job Vacancy Scraper on Apify](https://apify.com/signal_lab/job-vacancy-scraper) | [Job Posting Scraper API](./job-posting-scraper-api.md) |
 | Extract restaurant menu items and prices | [Run Restaurant Menu Extractor on Apify](https://apify.com/signal_lab/restaurant-menu-extractor) | [Restaurant Menu Scraper API](./restaurant-menu-scraper-api.md) |
 
 **No code:** open any Actor above, enter the input, and click **Start**.  
-**API:** use the copy-paste examples below.  
+**API:** use the copy-paste examples below or open the dedicated guide.  
 **AI agent / MCP:** connect the single remote endpoint below and choose the tool you need.
 
 > Pricing can change. Use each Actor's live **Pricing** tab in Apify as the source of truth.
@@ -47,6 +47,7 @@ Apify handles the MCP connection and authentication flow. Actor pricing remains 
 - [Amazon Price Tracker API — ASIN monitoring and price-drop alerts](./amazon-price-tracker-api.md)
 - [Google Autocomplete API — buyer-intent keyword research](./google-autocomplete-api.md)
 - [Website to Markdown API — clean RAG and LLM ingestion](./website-to-markdown-api.md)
+- [YouTube Transcript API — captions, timestamps, and metadata](./youtube-transcript-api.md)
 - [Job Posting Scraper API — title, salary, company, and location](./job-posting-scraper-api.md)
 - [Restaurant Menu Scraper API — items, prices, sections, and descriptions](./restaurant-menu-scraper-api.md)
 - [Reddit Scraper API — search posts and comments](./reddit-scraper-api.md)
@@ -130,7 +131,8 @@ curl -X POST \
 
 ## 4. YouTube Transcript API — captions, timestamps, and metadata
 
-**Run in Store:** https://apify.com/signal_lab/youtube-transcript-scraper
+**Run in Store:** https://apify.com/signal_lab/youtube-transcript-scraper  
+**API guide:** [youtube-transcript-api.md](./youtube-transcript-api.md)
 
 Useful for:
 - public YouTube transcripts
@@ -138,7 +140,7 @@ Useful for:
 - RAG and semantic search
 - research, summarization, and indexing workflows
 
-Open the Actor's Store page for the current input schema and live pricing, then run it from the UI, API, schedule, or MCP.
+The dedicated guide includes the current input fields, a copy-paste API call, and the focused MCP configuration.
 
 ## MCP / AI-agent usage
 
