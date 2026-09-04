@@ -1,0 +1,44 @@
+name: Audit Signal Lab agentic Store discovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/audit-apify-agentic-discovery.yml"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Query Apify agentic Store search
+        shell: bash
+        run: |
+          set -euo pipefail
+          queries=(
+            "amazon price tracker"
+            "google autocomplete api"
+            "reddit scraper api"
+            "website to markdown"
+          )
+          for q in "${queries[@]}"; do
+            echo "===== QUERY: $q ====="
+            response="$(curl --fail --silent --show-error -G 'https://api.apify.com/v2/store' \
+              --data-urlencode "search=$q" \
+              --data 'allowsAgenticUsers=true' \
+              --data 'limit=20' \
+              --data 'responseFormat=agent')"
+            echo "$response" | jq -r '
+              (.data.items // .items // [])
+              | to_entries[]
+              | "rank=\(.key + 1) actor=\(.value.username)/\(.value.name) title=\(.value.title // "")"'
+            rank="$(echo "$response" | jq -r '
+              (.data.items // .items // [])
+              | to_entries
+              | map(select(.value.username == "signal_lab"))
+              | if length == 0 then "NOT_FOUND" else (map(.key + 1) | join(",")) end')"
+            echo "SIGNAL_LAB_RANK=$rank"
+            echo
+          done
