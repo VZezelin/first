@@ -1,0 +1,30 @@
+name: Submit Signal Lab skill to agent-skills.md
+
+on:
+  push:
+    paths:
+      - '.github/workflows/submit-agent-skills-md.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit exact public skill directory once
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo_url='https://github.com/VZezelin/first/tree/main/skills/signal-lab-apify-tools'
+          encoded=$(python3 - <<'PY'
+          import urllib.parse
+          print(urllib.parse.quote('https://github.com/VZezelin/first/tree/main/skills/signal-lab-apify-tools', safe=''))
+          PY
+          )
+          code=$(curl -sS -o /tmp/response.json -w '%{http_code}' "https://agent-skills.md/api/add/${encoded}")
+          echo "HTTP_STATUS=$code"
+          cat /tmp/response.json
+          echo
+          test "$code" -ge 200 -a "$code" -lt 300
+          grep -q '"ok":true' /tmp/response.json
