@@ -1,0 +1,30 @@
+name: Submit Signal Lab Agent Skill to skill.fish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/submit-skillfish.yml
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Agent Skill exists
+        run: |
+          set -euo pipefail
+          test -f skills/signal-lab-apify-tools/SKILL.md
+          grep -Fq 'name: signal-lab-apify-tools' skills/signal-lab-apify-tools/SKILL.md
+          grep -Fq '## Use When' skills/signal-lab-apify-tools/SKILL.md
+          grep -Fq '## Rules' skills/signal-lab-apify-tools/SKILL.md
+          echo 'AGENT_SKILL_LOCAL_VALIDATION=true'
+      - name: Submit public repository to skill.fish
+        run: |
+          set -euo pipefail
+          npx -y skillfish@latest submit VZezelin/first --yes
