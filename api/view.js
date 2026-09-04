@@ -1,4 +1,4 @@
-const ALLOWED_PAGES = new Set(['home','youtube','website']);
+const ALLOWED_PAGES = new Set(['home','youtube','website','jobs']);
 
 function referrerHost(value) {
   try {
