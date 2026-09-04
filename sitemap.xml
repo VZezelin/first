@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://first-livid-omega.vercel.app/</loc><priority>1.0</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/amazon-price-tracker-api.md</loc><priority>0.9</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/google-autocomplete-api.md</loc><priority>0.9</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/website-to-markdown-api.md</loc><priority>0.9</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/youtube-transcript-api.md</loc><priority>0.9</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/reddit-scraper-api.md</loc><priority>0.9</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/job-posting-scraper-api.md</loc><priority>0.9</priority></url>
+  <url><loc>https://first-livid-omega.vercel.app/restaurant-menu-scraper-api.md</loc><priority>0.9</priority></url>
+</urlset>
