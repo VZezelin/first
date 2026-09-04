@@ -1,4 +1,4 @@
-# Signal Lab — Apify API examples for price tracking, keyword research, RAG, transcripts, jobs, and menus
+# Signal Lab — Apify API examples for price tracking, keyword research, RAG, transcripts, jobs, menus, and Reddit
 
 Small copy-paste examples for public **Signal Lab** Actors on the Apify Store. The goal is to make common automation jobs easy to test from the Store, Apify API, schedules, webhooks, Make, n8n, or MCP.
 
@@ -11,6 +11,7 @@ Small copy-paste examples for public **Signal Lab** Actors on the Apify Store. T
 - [Website to Markdown API — clean RAG and LLM ingestion](./website-to-markdown-api.md)
 - [Job Posting Scraper API — title, salary, company, and location](./job-posting-scraper-api.md)
 - [Restaurant Menu Scraper API — items, prices, sections, and descriptions](./restaurant-menu-scraper-api.md)
+- [Reddit Scraper API — search posts and comments](./reddit-scraper-api.md)
 
 ## 1. Amazon Price Tracker API — track an ASIN and build price-drop alerts
 
