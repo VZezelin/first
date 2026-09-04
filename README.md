@@ -4,6 +4,28 @@ Small copy-paste examples for public **Signal Lab** Actors on the Apify Store. T
 
 > Pricing can change. Use each Actor's live **Pricing** tab in Apify as the source of truth.
 
+## Official MCP Registry
+
+Signal Lab is published in the **Official Model Context Protocol Registry** as:
+
+`io.github.VZezelin/signal-lab-apify-tools`
+
+Registry search: https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools
+
+The registered remote uses Apify's hosted Streamable HTTP MCP endpoint and exposes a focused set of Signal Lab tools for Amazon price tracking, Google Autocomplete keywords, website-to-Markdown/RAG, YouTube transcripts, Reddit search/comments, public job postings, and restaurant menus.
+
+```json
+{
+  "mcpServers": {
+    "signal-lab": {
+      "url": "https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor"
+    }
+  }
+}
+```
+
+Apify handles the MCP connection and authentication flow. Actor pricing remains defined by each Actor's live Apify Pricing tab.
+
 ## Buyer-intent API guides
 
 - [Amazon Price Tracker API — ASIN monitoring and price-drop alerts](./amazon-price-tracker-api.md)
@@ -104,23 +126,16 @@ Open the Actor's Store page for the current input schema and live pricing, then 
 
 ## MCP / AI-agent usage
 
-Apify Actors can also be exposed through Apify's hosted MCP integration. For example:
-
-```json
-{
-  "mcpServers": {
-    "signal-lab": {
-      "url": "https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper"
-    }
-  }
-}
-```
+The Official MCP Registry entry above is the canonical discovery record for this Signal Lab tool bundle. You can also configure the same Apify-hosted endpoint directly in MCP-compatible clients.
 
 After authentication, an agent can request tasks such as:
 - “Track this Amazon ASIN and return the current price.”
 - “Find Google Autocomplete suggestions for this buyer-intent keyword.”
 - “Convert this page to clean Markdown for a RAG pipeline.”
 - “Get this public YouTube transcript with timestamps.”
+- “Search Reddit for recent product feedback and return source URLs.”
+- “Extract structured fields from this public job posting.”
+- “Extract menu items and prices from this restaurant page.”
 
 ## More Signal Lab Actors
 
