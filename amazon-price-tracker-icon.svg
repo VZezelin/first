@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Price tracker icon</title>
+  <desc id="desc">Rounded dark tile with a price tag and falling price chart.</desc>
+  <rect width="512" height="512" rx="112" fill="#111827"/>
+  <path d="M134 161c0-22 18-40 40-40h122l82 82v134c0 30-24 54-54 54H188c-30 0-54-24-54-54V161Z" fill="#F59E0B"/>
+  <circle cx="203" cy="188" r="20" fill="#111827"/>
+  <path d="M195 300l58-54 47 36 75-81" fill="none" stroke="#111827" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M336 201h39v39" fill="none" stroke="#111827" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
