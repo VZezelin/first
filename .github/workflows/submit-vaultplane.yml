@@ -1,0 +1,41 @@
+name: Submit Signal Lab MCP to VaultPlane
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-vaultplane.yml"
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Submit MCP server for review
+        run: |
+          set -euo pipefail
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            -X POST \
+            -H 'Content-Type: application/json' \
+            --data @- \
+            https://www.vaultplane.com/api/servers/submit <<'JSON'
+          {
+            "name": "Signal Lab Apify Data Tools",
+            "description": "Remote MCP bundle for Amazon price tracking, Google Autocomplete keyword research, website-to-Markdown RAG ingestion, YouTube transcripts, Reddit search and comments, job posting extraction, and restaurant menu extraction through public Signal Lab Apify Actors.",
+            "githubUrl": "https://github.com/VZezelin/first",
+            "documentationUrl": "https://github.com/VZezelin/first#readme",
+            "installCommand": "https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor",
+            "maintainerName": "VZezelin",
+            "organization": "Signal Lab"
+          }
+          JSON
+          )"
+          cat "$response_file"
+          echo
+          echo "HTTP_STATUS=$status"
+          test "$status" -ge 200 -a "$status" -lt 300
