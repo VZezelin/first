@@ -1,0 +1,69 @@
+name: Register Signal Lab in mcpub
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-mcpub.yml"
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Wait for production MCP discovery metadata
+        run: |
+          set -euo pipefail
+          expected='Signal Lab Apify Data Tools'
+          url='https://first-livid-omega.vercel.app/.well-known/mcp.json'
+          for i in $(seq 1 24); do
+            body="$(curl -fsSL "$url" 2>/dev/null || true)"
+            if printf '%s' "$body" | grep -Fq "$expected"; then
+              echo 'MCP_DISCOVERY_LIVE=true'
+              exit 0
+            fi
+            sleep 5
+          done
+          echo 'MCP_DISCOVERY_LIVE=false' >&2
+          exit 1
+
+      - name: Register base URL in mcpub
+        run: |
+          set -euo pipefail
+          payload='{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"submit","arguments":{"url":"https://first-livid-omega.vercel.app","description":"Signal Lab remote MCP bundle for Amazon price tracking, Google Autocomplete, website-to-Markdown for RAG, public YouTube captions and timestamps, Reddit research, Schema.org JobPosting extraction, and restaurant menu extraction through Apify."}}}'
+          response="$(curl -fsSL -X POST 'https://mcpub.dev/mcp' -H 'Content-Type: application/json' --data-binary "$payload")"
+          printf '%s\n' "$response"
+          if printf '%s' "$response" | grep -Fq '"status": "registered"'; then
+            echo 'MCPUB_REGISTERED=true'
+          elif printf '%s' "$response" | grep -Fq 'url already registered'; then
+            echo 'MCPUB_REGISTERED=already_registered'
+          else
+            echo 'MCPUB_REGISTERED=false' >&2
+            exit 1
+          fi
+
+      - name: Verify archived listing by exact URL
+        run: |
+          set -euo pipefail
+          payload='{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get","arguments":{"url":"https://first-livid-omega.vercel.app"}}}'
+          response="$(curl -fsSL -X POST 'https://mcpub.dev/mcp' -H 'Content-Type: application/json' --data-binary "$payload")"
+          printf '%s\n' "$response"
+          printf '%s' "$response" | grep -Fq 'https://first-livid-omega.vercel.app'
+          printf '%s' "$response" | grep -Fq 'Signal Lab remote MCP bundle'
+          echo 'MCPUB_ARCHIVE_LISTED_VERIFIED=true'
+
+      - name: Probe actual Apify MCP initialize without credentials
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          endpoint='https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor'
+          body='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"signal-lab-verifier","version":"1.0"}}}'
+          response_file="$(mktemp)"
+          headers_file="$(mktemp)"
+          status="$(curl -sS -o "$response_file" -D "$headers_file" -w '%{http_code}' -X POST "$endpoint" -H 'Content-Type: application/json' --data-binary "$body")"
+          echo "APIFY_MCP_INITIALIZE_HTTP=$status"
+          grep -iE '^(www-authenticate|mcp-session-id|content-type):' "$headers_file" || true
+          cat "$response_file"
+          echo
