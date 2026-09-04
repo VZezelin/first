@@ -1,0 +1,26 @@
+name: Verify Signal Lab pageview measurement
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/verify-site-view.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Send one controlled pageview baseline
+        run: |
+          set -euo pipefail
+          status="$(curl -sS -o /tmp/body -w '%{http_code}' \
+            -X POST \
+            -H 'Referer: https://verification.local/' \
+            'https://first-livid-omega.vercel.app/api/view')"
+          echo "SITE_VIEW_HTTP=$status"
+          cat /tmp/body || true
+          echo
+          test "$status" = "204"
