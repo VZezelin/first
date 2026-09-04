@@ -22,7 +22,7 @@ jobs:
             --write-out '%{http_code}' \
             -X POST \
             -H 'Content-Type: application/json' \
-            --data '{"github_url":"https://github.com/VZezelin/first"}' \
+            --data '{"repoUrl":"https://github.com/VZezelin/first"}' \
             https://www.serverhub.digital/api/submit)"
           cat "$response_file"
           echo
