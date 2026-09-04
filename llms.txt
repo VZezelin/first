@@ -8,20 +8,20 @@ Use the pages below to understand each tool before calling it. Do not assume una
 
 - [YouTube Transcript API](https://first-livid-omega.vercel.app/youtube-transcript-api.html): Available public captions, timestamped segments, Python/API workflows, RAG/LangChain ingestion, and MCP.
 - [Website to Markdown API](https://first-livid-omega.vercel.app/website-to-markdown-api.html): Bounded public-site crawling to clean Markdown plus metadata for RAG, LLM pipelines, semantic search, and MCP.
+- [Job Posting Scraper API](https://first-livid-omega.vercel.app/job-posting-scraper-api.html): Extract normalized fields from known public job-posting URLs, including Schema.org JobPosting metadata where available.
 - [Amazon Price Tracker API](https://apify.com/signal_lab/amazon-price-tracker): Track public Amazon product price and availability data through Apify.
 - [Google Autocomplete API](https://apify.com/signal_lab/google-autocomplete-keywords): Collect live Google Autocomplete keyword suggestions and buyer-intent phrases.
 - [Reddit Search & Comments](https://apify.com/signal_lab/reddit-search-comments): Search public Reddit content and collect comments for research workflows.
-- [Job Vacancy Scraper](https://apify.com/signal_lab/job-vacancy-scraper): Extract structured data from supported public job pages, including Schema.org JobPosting workflows.
 - [Restaurant Menu Extractor](https://apify.com/signal_lab/restaurant-menu-extractor): Extract structured menu data from supported public restaurant pages.
 
 ## Markdown developer guides
 
 - [YouTube Transcript API guide](https://raw.githubusercontent.com/VZezelin/first/main/youtube-transcript-api.md): Raw Markdown developer documentation.
 - [Website to Markdown API guide](https://raw.githubusercontent.com/VZezelin/first/main/website-to-markdown-api.md): Raw Markdown developer documentation.
+- [Job Posting Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/job-posting-scraper-api.md): Raw Markdown developer documentation.
 - [Amazon Price Tracker API guide](https://raw.githubusercontent.com/VZezelin/first/main/amazon-price-tracker-api.md): Raw Markdown developer documentation.
 - [Google Autocomplete API guide](https://raw.githubusercontent.com/VZezelin/first/main/google-autocomplete-api.md): Raw Markdown developer documentation.
 - [Reddit Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/reddit-scraper-api.md): Raw Markdown developer documentation.
-- [Job Posting Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/job-posting-scraper-api.md): Raw Markdown developer documentation.
 - [Restaurant Menu Scraper API guide](https://raw.githubusercontent.com/VZezelin/first/main/restaurant-menu-scraper-api.md): Raw Markdown developer documentation.
 
 ## MCP
