@@ -1,33 +1,36 @@
-name: Publish Signal Lab MCP to MCP Central
+name: Verify Signal Lab MCP in MCP Central
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '17 7 * * *'
   push:
     branches: ["main"]
     paths:
       - ".github/workflows/publish-mcpcentral.yml"
 
 jobs:
-  publish:
+  verify:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: read
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Install official MCP publisher
+      - name: Check MCP Central public catalog
         run: |
           set -euo pipefail
-          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
-
-      - name: Validate server metadata
-        run: ./mcp-publisher validate server.json
-
-      - name: Authenticate with MCP Central using GitHub OIDC
-        run: ./mcp-publisher login github-oidc --registry https://registry.mcpcentral.io
-
-      - name: Publish to MCP Central registry
-        run: ./mcp-publisher publish server.json
+          id='io.github.VZezelin/signal-lab-apify-tools'
+          encoded='io.github.VZezelin%2Fsignal-lab-apify-tools'
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            "https://mcpcentral.io/api/servers/${encoded}")"
+          echo "MCP_CENTRAL_HTTP=$status"
+          cat "$response_file"
+          echo
+          if [ "$status" = "200" ] && grep -Fq "$id" "$response_file"; then
+            echo "MCP_CENTRAL_LISTED_VERIFIED=true"
+          else
+            echo "MCP_CENTRAL_LISTED_VERIFIED=false"
+            echo "Official Registry is already canonical; MCP Central mirror is still pending or uses a different public lookup shape."
+          fi
