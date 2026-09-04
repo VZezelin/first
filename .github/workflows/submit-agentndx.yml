@@ -1,0 +1,32 @@
+name: Submit Signal Lab MCP to AgentNDX
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-agentndx.yml"
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Submit public metadata for review
+        run: |
+          set -euo pipefail
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            --data-urlencode 'name=Signal Lab Apify Data Tools' \
+            --data-urlencode 'github_url=https://github.com/VZezelin/first' \
+            --data-urlencode 'homepage_url=https://apify.com/signal_lab' \
+            --data-urlencode 'protocols=MCP' \
+            --data-urlencode 'description=Remote MCP bundle of Apify data tools for price tracking, keywords, RAG, transcripts, Reddit, jobs, and menus.' \
+            https://agentndx.ai/api/submit)"
+          cat "$response_file"
+          echo
+          echo "HTTP_STATUS=$status"
+          test "$status" -ge 200 -a "$status" -lt 300
