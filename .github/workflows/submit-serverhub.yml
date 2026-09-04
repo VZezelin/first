@@ -17,14 +17,17 @@ jobs:
         run: |
           set -euo pipefail
           response_file="$(mktemp)"
+          headers_file="$(mktemp)"
           status="$(curl --silent --show-error \
             --output "$response_file" \
+            --dump-header "$headers_file" \
             --write-out '%{http_code}' \
             -X POST \
             -H 'Content-Type: application/json' \
-            --data '{"repoUrl":"https://github.com/VZezelin/first"}' \
+            --data '{"url":"https://github.com/VZezelin/first"}' \
             https://www.serverhub.digital/api/submit)"
           cat "$response_file"
           echo
           echo "HTTP_STATUS=$status"
+          grep -iE '^(location|content-type):' "$headers_file" || true
           test "$status" -ge 200 -a "$status" -lt 300
