@@ -1,0 +1,28 @@
+name: Submit Signal Lab Agent Skill to agentskills.in
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/submit-agentskills.yml
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate skill with public CLI
+        run: |
+          set -euo pipefail
+          npx -y agent-skills-cli@latest score ./skills/signal-lab-apify-tools --json || true
+      - name: Submit public repository for marketplace indexing
+        env:
+          DO_NOT_TRACK: '1'
+        run: |
+          set -euo pipefail
+          npx -y agent-skills-cli@latest submit-repo VZezelin/first
