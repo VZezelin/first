@@ -4,6 +4,11 @@
       "source": "/youtube-transcript-api.md",
       "destination": "/youtube-transcript-api.html",
       "permanent": true
+    },
+    {
+      "source": "/website-to-markdown-api.md",
+      "destination": "/website-to-markdown-api.html",
+      "permanent": true
     }
   ]
 }
