@@ -1,0 +1,27 @@
+name: Submit Signal Lab to MCP.Directory
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-mcp-directory.yml"
+  workflow_dispatch:
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Submit public metadata for review
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error \
+            -H 'Content-Type: application/json' \
+            --data-binary @distribution/mcp-directory-submission.json \
+            https://mcp.directory/api/submit-server)"
+          printf '%s\n' "$response"
+          printf '%s\n' "$response" | jq -e '.ok == true'
