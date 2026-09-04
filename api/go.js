@@ -15,11 +15,15 @@ export default function handler(req, res) {
   const destination = TARGETS[actor];
   if (!destination) {
     res.setHeader('Cache-Control', 'no-store');
-    return res.status(400).json({ ok: false, error: 'UNKNOWN_ACTOR' });
+    res.statusCode = 400;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.end(JSON.stringify({ ok: false, error: 'UNKNOWN_ACTOR' }));
   }
 
-  // Deliberately log only the selected destination and timestamp — no IP, cookies, or user identifiers.
+  // Privacy-minimal funnel event: no IP, cookie, account, or user identifier is logged here.
   console.log(JSON.stringify({ event: 'signal_lab_apify_outbound', actor, at: new Date().toISOString() }));
   res.setHeader('Cache-Control', 'no-store');
-  return res.redirect(302, `${destination}?utm_source=signal-lab-site&utm_medium=referral&utm_campaign=first-revenue`);
+  res.statusCode = 302;
+  res.setHeader('Location', `${destination}?utm_source=signal-lab-site&utm_medium=referral&utm_campaign=first-revenue`);
+  return res.end();
 }
