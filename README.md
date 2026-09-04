@@ -1,8 +1,15 @@
-# Signal Lab — Apify API examples for price tracking, keyword research, RAG, and transcripts
+# Signal Lab — Apify API examples for price tracking, keyword research, RAG, transcripts, jobs, and menus
 
 Small copy-paste examples for public **Signal Lab** Actors on the Apify Store. The goal is to make common automation jobs easy to test from the Store, Apify API, schedules, webhooks, Make, n8n, or MCP.
 
 > Pricing can change. Use each Actor's live **Pricing** tab in Apify as the source of truth.
+
+## Buyer-intent API guides
+
+- [Amazon Price Tracker API — ASIN monitoring and price-drop alerts](./amazon-price-tracker-api.md)
+- [Google Autocomplete API — buyer-intent keyword research](./google-autocomplete-api.md)
+- [Job Posting Scraper API — title, salary, company, and location](./job-posting-scraper-api.md)
+- [Restaurant Menu Scraper API — items, prices, sections, and descriptions](./restaurant-menu-scraper-api.md)
 
 ## 1. Amazon Price Tracker API — track an ASIN and build price-drop alerts
 
