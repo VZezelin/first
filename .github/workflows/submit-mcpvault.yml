@@ -1,0 +1,36 @@
+name: Submit Signal Lab to MCPVault
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/submit-mcpvault.yml"
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Submit documented MCPVault repository endpoint
+        run: |
+          set -euo pipefail
+          response_file="$(mktemp)"
+          status="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            -X POST \
+            -H 'Content-Type: application/json' \
+            -H 'User-Agent: signal-lab-mcp-submission/1.0' \
+            --data '{"repo_url":"https://github.com/VZezelin/first"}' \
+            https://mcpvault.io/api/mcp-submit)"
+          echo "MCPVAULT_HTTP=$status"
+          cat "$response_file"
+          echo
+          case "$status" in
+            200|201) exit 0 ;;
+            422) echo 'Repository did not pass MCPVault plausibility gate; do not retry blindly.'; exit 2 ;;
+            429) echo 'Submission rate limit reached; do not retry today.'; exit 3 ;;
+            *) exit 1 ;;
+          esac
