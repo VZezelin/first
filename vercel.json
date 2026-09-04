@@ -10,5 +10,34 @@
       "destination": "/website-to-markdown-api.html",
       "permanent": true
     }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\""
+        }
+      ]
+    },
+    {
+      "source": "/youtube-transcript-api.html",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", <https://raw.githubusercontent.com/VZezelin/first/main/youtube-transcript-api.md>; rel=\"alternate\"; type=\"text/markdown\""
+        }
+      ]
+    },
+    {
+      "source": "/website-to-markdown-api.html",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", <https://raw.githubusercontent.com/VZezelin/first/main/website-to-markdown-api.md>; rel=\"alternate\"; type=\"text/markdown\""
+        }
+      ]
+    }
   ]
 }
