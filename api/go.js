@@ -9,6 +9,22 @@ const TARGETS = Object.freeze({
   restaurant: 'https://apify.com/signal_lab/restaurant-menu-extractor',
 });
 
+function referrerHost(value) {
+  try {
+    return value ? new URL(value).hostname.toLowerCase() : null;
+  } catch {
+    return null;
+  }
+}
+
+function agentClass(value) {
+  const ua = String(value || '').toLowerCase();
+  if (!ua) return 'unknown';
+  if (/bot|crawler|spider|slurp|headless|curl|wget|python|httpclient|preview|vercel|github/.test(ua)) return 'bot_or_automation';
+  if (/mozilla|chrome|safari|firefox|edg\//.test(ua)) return 'browser';
+  return 'other';
+}
+
 export default function handler(req, res) {
   const raw = Array.isArray(req.query?.actor) ? req.query.actor[0] : req.query?.actor;
   const actor = String(raw || '').toLowerCase();
@@ -20,8 +36,15 @@ export default function handler(req, res) {
     return res.end(JSON.stringify({ ok: false, error: 'UNKNOWN_ACTOR' }));
   }
 
-  // Privacy-minimal funnel event: no IP, cookie, account, or user identifier is logged here.
-  console.log(JSON.stringify({ event: 'signal_lab_apify_outbound', actor, at: new Date().toISOString() }));
+  // Privacy-minimal funnel event: no IP, cookie, account, full user-agent, or user identifier is logged.
+  console.log(JSON.stringify({
+    event: 'signal_lab_apify_outbound',
+    actor,
+    referrerHost: referrerHost(req.headers?.referer || req.headers?.referrer),
+    agentClass: agentClass(req.headers?.['user-agent']),
+    at: new Date().toISOString(),
+  }));
+
   res.setHeader('Cache-Control', 'no-store');
   res.statusCode = 302;
   res.setHeader('Location', `${destination}?utm_source=signal-lab-site&utm_medium=referral&utm_campaign=first-revenue`);
