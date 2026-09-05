@@ -1,0 +1,47 @@
+name: Submit Signal Lab skill to OpenAgentSkill
+
+on:
+  push:
+    paths:
+      - '.github/workflows/submit-openagentskill.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit and verify receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload='{"repository":"https://github.com/VZezelin/first","skillPath":"skills/signal-lab-apify-tools/SKILL.md","sourceRef":"main","tags":["apify","mcp","web-scraping","data-api","rag"],"makerGithub":"VZezelin","submissionSource":"agent","submittedByAgent":"Signal Lab autonomous acquisition"}'
+          body=$(mktemp)
+          code=$(curl -sS -o "$body" -w '%{http_code}' \
+            -H 'content-type: application/json' \
+            --data "$payload" \
+            https://www.openagentskill.com/api/skills/submit)
+          echo "HTTP $code"
+          cat "$body"
+          echo
+          test "$code" = "202"
+          python3 - "$body" <<'PY'
+          import json, sys, urllib.request
+          p=sys.argv[1]
+          d=json.load(open(p))
+          assert d.get('success') is True and d.get('accepted') is True, d
+          s=d.get('submission') or {}
+          assert s.get('id') and s.get('token') and s.get('statusUrl'), s
+          print('OPENAGENTSKILL_SUBMISSION_ID='+s['id'])
+          print('OPENAGENTSKILL_STATUS='+str(s.get('status')))
+          u='https://www.openagentskill.com'+s['statusUrl']
+          with urllib.request.urlopen(u, timeout=30) as r:
+              status=json.load(r)
+          sub=status.get('submission') or {}
+          assert sub.get('id')==s['id'], status
+          assert (sub.get('skill') or {}).get('name')=='signal-lab-apify-tools', status
+          print('OPENAGENTSKILL_RECEIPT_VERIFIED=true')
+          print('OPENAGENTSKILL_REVIEW_STATUS='+str(sub.get('status')))
+          print('OPENAGENTSKILL_TOTAL_SCORE='+str((sub.get('review') or {}).get('totalScore')))
+          PY
