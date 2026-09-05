@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/.well-known/agent-skills/index.json",
-      "destination": "/agent-skills-index.json"
+      "destination": "/agent-skills-index.txt"
     }
   ],
   "redirects": [
