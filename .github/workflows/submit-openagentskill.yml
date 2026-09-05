@@ -1,0 +1,40 @@
+name: Submit Signal Lab skill to OpenAgentSkill
+
+on:
+  push:
+    paths:
+      - '.github/workflows/submit-openagentskill.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Submit once and save sanitized receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload='{"repository":"https://github.com/VZezelin/first","skillPath":"skills/signal-lab-apify-tools/SKILL.md","sourceRef":"main","category":"Web Scraping","tags":["apify","mcp","web-scraping","data-api","rag","automation"],"makerGithub":"VZezelin","submissionSource":"agent","submittedByAgent":"Signal Lab distribution automation"}'
+          code=$(curl -sS -o /tmp/openagentskill.json -w '%{http_code}' \
+            -X POST 'https://www.openagentskill.com/api/skills/submit' \
+            -H 'Content-Type: application/json' \
+            --data "$payload")
+          echo "OPENAGENTSKILL_HTTP=$code"
+          test "$code" = 202
+          jq -e '.accepted == true and .success == true' /tmp/openagentskill.json >/dev/null
+          mkdir -p distribution
+          jq '{accepted, message, submission: {id: .submission.id, status: .submission.status, skill: .submission.skill}, receivedAt: (now | todateiso8601)}' /tmp/openagentskill.json > distribution/openagentskill-receipt.json
+          cat distribution/openagentskill-receipt.json
+      - name: Commit sanitized receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add distribution/openagentskill-receipt.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record OpenAgentSkill submission receipt'
+          git push
