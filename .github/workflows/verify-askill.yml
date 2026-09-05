@@ -1,0 +1,40 @@
+name: Verify Signal Lab skill in askill
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-askill.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read exact indexed skill from askill
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /tmp/askill-skill.json -w '%{http_code}' \
+            -H 'Accept: application/json' \
+            -H 'User-Agent: askill-cli' \
+            'https://askill.sh/api/v1/skills/703900')
+          echo "ASKILL_READ_HTTP=$code"
+          cat /tmp/askill-skill.json
+          echo
+          test "$code" = 200
+          jq -e '.id == 703900 and .name == "signal-lab-apify-tools" and .owner == "VZezelin" and .repo == "first"' /tmp/askill-skill.json >/dev/null
+          mkdir -p distribution
+          jq '{id, name, description, tags, owner, repo, path, updatedAt, verifiedAt: (now | todateiso8601)}' /tmp/askill-skill.json > distribution/askill-listing.json
+      - name: Commit verified listing snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add distribution/askill-listing.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Verify Signal Lab listing in askill registry'
+          git push
