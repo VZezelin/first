@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/.well-known/agent-skills/index.json",
+      "destination": "/agent-skills-index.json"
+    }
+  ],
   "redirects": [
     {
       "source": "/youtube-transcript-api.md",
@@ -18,11 +24,24 @@
   ],
   "headers": [
     {
+      "source": "/.well-known/agent-skills/index.json",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/",
       "headers": [
         {
           "key": "Link",
-          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\""
+          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", </.well-known/agent-skills/index.json>; rel=\"alternate\"; type=\"application/json\""
         }
       ]
     },
