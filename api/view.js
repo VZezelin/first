@@ -1,4 +1,5 @@
 const ALLOWED_PAGES = new Set(['home','youtube','website','jobs']);
+const agentSkillsIndex = require('../agent-skills-index.json');
 
 function referrerHost(value) {
   try {
@@ -17,8 +18,17 @@ function agentClass(value) {
 }
 
 module.exports = async function handler(req, res) {
+  const discovery = Array.isArray(req.query?.discovery) ? req.query.discovery[0] : req.query?.discovery;
+
+  if (req.method === 'GET' && discovery === 'agent-skills') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.status(200).json(agentSkillsIndex);
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).end();
   }
 
