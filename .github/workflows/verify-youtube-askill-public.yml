@@ -1,0 +1,32 @@
+name: Verify YouTube askill public listing
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-youtube-askill-public.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read back public askill registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== EXACT INFO ==='
+          npx --yes askill-cli info @VZezelin/youtube-transcript-api --json | tee /tmp/info.json
+          echo '=== BUYER-INTENT SEARCH ==='
+          npx --yes askill-cli find youtube transcript --json | tee /tmp/find.json
+          python3 - <<'PY'
+          import json
+          info=json.load(open('/tmp/info.json'))
+          text=json.dumps(info).lower()
+          assert 'youtube-transcript-api' in text, info
+          print('ASKILL_YOUTUBE_EXACT_READBACK=true')
+          find=json.load(open('/tmp/find.json'))
+          s=json.dumps(find).lower()
+          print('ASKILL_YOUTUBE_SEARCH_FOUND='+('true' if 'youtube-transcript-api' in s else 'false'))
+          PY
