@@ -53,6 +53,17 @@ Use Signal Lab as a routing skill for a small set of focused public-data workflo
 6. Verify that returned fields actually came from the source. Missing source fields are not evidence that they exist.
 7. Scale only after the first bounded result is useful and the user accepts the live pricing/economics.
 
+## Failure, Retry, and Cost Handling
+
+- Treat HTTP `429` as backpressure, not permission to increase concurrency. Respect `Retry-After` when present; otherwise use bounded exponential backoff with jitter.
+- Retry transient `5xx`, network, or timeout failures only a small number of times. Do not retry deterministic `4xx` validation/authentication errors until the input or authentication problem is corrected.
+- If an Actor run reaches `FAILED`, `TIMED-OUT`, or `ABORTED`, inspect the run status/log evidence before deciding whether a retry is justified. Never loop paid retries blindly.
+- For polling, back off between status checks rather than hammering the API. Stop polling once the run is terminal.
+- Keep the original input bounded when retrying. Do not raise `maxPages`, item counts, crawl depth, concurrency, or proxy scope as a generic failure response.
+- Re-check the live Pricing tab before materially expanding a retry or batch. A successful API request does not mean the downstream run is free.
+- Stop and report the blocker if repeated transient retries fail, the source blocks lawful access, authentication is unavailable, or the next attempt would materially increase spend.
+- Never convert a failed paid run into an excuse to start a different paid Actor without a clear task fit and user-authorized economics.
+
 ## Rules
 
 - Always use the user's own Apify authentication for paid execution or MCP authorization.
