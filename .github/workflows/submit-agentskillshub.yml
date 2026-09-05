@@ -1,0 +1,41 @@
+name: Submit Signal Lab to AgentSkillsHub
+
+on:
+  push:
+    paths:
+      - '.github/workflows/submit-agentskillshub.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Submit public GitHub repository once
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload='{"repo_url":"https://github.com/VZezelin/first"}'
+          code=$(curl -sS -o /tmp/agentskillshub.json -w '%{http_code}' \
+            -X POST 'https://agentskillshub.top/api/submit-skill' \
+            -H 'Content-Type: application/json' \
+            --data "$payload")
+          echo "AGENTSKILLSHUB_HTTP=$code"
+          cat /tmp/agentskillshub.json
+          echo
+          test "$code" -ge 200 -a "$code" -lt 300
+          jq -e '.status == "submitted" or .status == "already_submitted" or .status == "already_tracked"' /tmp/agentskillshub.json >/dev/null
+          mkdir -p distribution
+          jq '{status, message, skill_id: (.skill_id // null), receivedAt: (now | todateiso8601)}' /tmp/agentskillshub.json > distribution/agentskillshub-receipt.json
+      - name: Commit sanitized receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add distribution/agentskillshub-receipt.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record AgentSkillsHub submission receipt'
+          git push
