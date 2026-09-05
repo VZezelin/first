@@ -1,0 +1,37 @@
+name: Verify YouTube skill discovery
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-youtube-skill-discovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public listing and task query
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, urllib.parse, urllib.request
+          def search(q):
+              u='https://www.openagentskill.com/api/skills/search?'+urllib.parse.urlencode({'q':q,'limit':20})
+              with urllib.request.urlopen(u, timeout=30) as r: return json.load(r)
+          by_name=search('youtube-transcript-api')
+          exact=[s for s in by_name.get('skills',[]) if s.get('name')=='youtube-transcript-api']
+          print('YOUTUBE_SKILL_PUBLIC_LISTED='+('true' if exact else 'false'))
+          if exact:
+              print('YOUTUBE_SKILL_SLUG='+str(exact[0].get('slug')))
+              print('YOUTUBE_SKILL_TRUST='+str((exact[0].get('trust') or {}).get('score')))
+          by_task=search('youtube transcript api')
+          hits=[s for s in by_task.get('skills',[]) if s.get('name')=='youtube-transcript-api']
+          print('YOUTUBE_TASK_FOUND='+('true' if hits else 'false'))
+          if hits:
+              print('YOUTUBE_TASK_RANK='+str(hits[0].get('rank')))
+              print('YOUTUBE_TASK_MATCH_SCORE='+str(hits[0].get('match_score')))
+              print('YOUTUBE_TASK_MATCH_TYPE='+str(hits[0].get('match_type')))
+          PY
