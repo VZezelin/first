@@ -6,7 +6,7 @@
     },
     {
       "source": "/.well-known/api-catalog",
-      "destination": "/.well-known/api-catalog.json"
+      "destination": "/api/view?discovery=api-catalog"
     }
   ],
   "redirects": [
