@@ -1,0 +1,9 @@
+Signal Lab agent discovery
+
+Human/developer hub: https://first-livid-omega.vercel.app/
+Agent capability declaration: https://first-livid-omega.vercel.app/agents.txt
+Agent Skills discovery index: https://first-livid-omega.vercel.app/.well-known/agent-skills/index.json
+LLM discovery: https://first-livid-omega.vercel.app/llms.txt
+Official MCP Registry: https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools
+
+The Agent Skills index contains SHA-256 integrity digests for the currently published Signal Lab skills. Execution uses the installer's own Apify authentication; no Signal Lab owner credentials are embedded or proxied.
