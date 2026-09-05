@@ -1,3 +1,5 @@
+const fs = require('node:fs');
+const path = require('node:path');
 const ALLOWED_PAGES = new Set(['home','youtube','website','jobs']);
 const agentSkillsIndex = require('../agent-skills-index.json');
 
@@ -60,6 +62,15 @@ module.exports = async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     return res.status(200).json(legacySkillsIndex);
+  }
+
+  if (req.method === 'GET' && discovery === 'skills-legacy-skill') {
+    const skillPath = path.join(process.cwd(), 'skills', 'signal-lab-apify-tools', 'SKILL.md');
+    const body = fs.readFileSync(skillPath, 'utf8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    return res.status(200).send(body);
   }
 
   if (req.method === 'GET' && discovery === 'api-catalog') {
