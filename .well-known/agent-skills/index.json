@@ -6,7 +6,7 @@
       "type": "skill-md",
       "description": "Route bounded public-data work through Signal Lab's focused Apify Actors and hosted MCP tools.",
       "url": "https://raw.githubusercontent.com/VZezelin/first/main/skills/signal-lab-apify-tools/SKILL.md",
-      "digest": "sha256:9656696f79e2b5fb7b5275459fcc3c7a84ac56a331c298b5079d1392ea47224a"
+      "digest": "sha256:82e6a324e77cf3dd14c49338846a0cc3218aa63953525d24538d195b5d7e139d"
     },
     {
       "name": "youtube-transcript-api",
