@@ -48,7 +48,8 @@ Signal Lab is published in the **Official Model Context Protocol Registry** as:
 
 `io.github.VZezelin/signal-lab-apify-tools`
 
-Registry search: https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools
+Registry search: https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools  
+Verified MCPRepository mirror: https://mcprepository.com/VZezelin/first
 
 The registered remote uses Apify's hosted Streamable HTTP MCP endpoint and exposes a focused set of Signal Lab tools:
 
