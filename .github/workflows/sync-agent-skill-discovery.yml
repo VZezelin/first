@@ -1,0 +1,83 @@
+name: Sync agent skill discovery
+
+on:
+  push:
+    paths:
+      - 'skills/**/SKILL.md'
+      - '.github/workflows/sync-agent-skill-discovery.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build agents.txt and Agent Skills discovery index
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json
+
+          origin = 'https://raw.githubusercontent.com/VZezelin/first/main'
+          mcp = 'https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor'
+          skills = [
+              {
+                  'name': 'signal-lab-apify-tools',
+                  'path': 'skills/signal-lab-apify-tools/SKILL.md',
+                  'description': "Route bounded public-data work through Signal Lab's focused Apify Actors and hosted MCP tools.",
+              },
+              {
+                  'name': 'youtube-transcript-api',
+                  'path': 'skills/youtube-transcript-api/SKILL.md',
+                  'description': 'Use the Signal Lab YouTube Transcript API for available public captions, timestamps, Python, RAG, and LangChain workflows.',
+              },
+          ]
+
+          entries = []
+          skill_urls = []
+          for s in skills:
+              data = Path(s['path']).read_bytes()
+              digest = hashlib.sha256(data).hexdigest()
+              url = f"{origin}/{s['path']}"
+              skill_urls.append(url)
+              entries.append({
+                  'name': s['name'],
+                  'type': 'skill-md',
+                  'description': s['description'],
+                  'url': url,
+                  'digest': f'sha256:{digest}',
+              })
+
+          Path('.well-known/agent-skills').mkdir(parents=True, exist_ok=True)
+          Path('.well-known/agent-skills/index.json').write_text(
+              json.dumps({
+                  '$schema': 'https://schemas.agentskills.io/discovery/0.2.0/schema.json',
+                  'skills': entries,
+              }, indent=2) + '\n', encoding='utf-8')
+
+          lines = [
+              '# Signal Lab agent capabilities',
+              *[f'Skills: {url}' for url in skill_urls],
+              f'MCP: {mcp}',
+              '',
+          ]
+          Path('agents.txt').write_text('\n'.join(lines), encoding='utf-8')
+          PY
+      - name: Commit discovery files when changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- agents.txt .well-known/agent-skills/index.json && git ls-files --error-unmatch agents.txt .well-known/agent-skills/index.json >/dev/null 2>&1; then
+            echo 'AGENT_SKILL_DISCOVERY_UP_TO_DATE=true'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add agents.txt .well-known/agent-skills/index.json
+          git commit -m 'Sync agent skill discovery surfaces'
+          git push
+          echo 'AGENT_SKILL_DISCOVERY_SYNCED=true'
