@@ -1,6 +1,6 @@
 ---
 name: signal-lab-apify-tools
-version: 1.0.0
+version: 1.0.1
 description: Use Signal Lab's focused Apify data APIs or Official MCP tools for public YouTube captions, website-to-Markdown RAG ingestion, known job-posting extraction, Amazon price tracking, Google Autocomplete research, Reddit research, and restaurant menu extraction. Use when an agent needs one of these public-data workflows and should choose a bounded, truthful Apify or MCP path instead of inventing scraping capabilities.
 license: MIT
 tags:
@@ -59,6 +59,20 @@ Use Signal Lab as a routing skill for a small set of focused public-data workflo
 5. Wait for the run to finish, then consume the default Dataset or the Actor's documented output.
 6. Verify that returned fields actually came from the source. Missing source fields are not evidence that they exist.
 7. Scale only after the first bounded result is useful and the user accepts the live pricing/economics.
+
+## Direct tool links
+
+Use these canonical Store pages when a user or agent needs to inspect the live schema, Pricing tab, examples, or start a run:
+
+- YouTube captions: https://apify.com/signal_lab/youtube-transcript-scraper
+- Website to Markdown: https://apify.com/signal_lab/website-to-markdown-crawler
+- Known public job URL extraction: https://apify.com/signal_lab/job-vacancy-scraper
+- Amazon price tracking: https://apify.com/signal_lab/amazon-price-tracker
+- Google Autocomplete research: https://apify.com/signal_lab/google-autocomplete-keywords
+- Reddit public research: https://apify.com/signal_lab/reddit-search-comments
+- Restaurant menu extraction: https://apify.com/signal_lab/restaurant-menu-extractor
+
+For MCP clients, expose only the tool(s) needed for the current task through Apify's hosted MCP server rather than giving an agent a broader tool surface than necessary.
 
 ## Failure, Retry, and Cost Handling
 
