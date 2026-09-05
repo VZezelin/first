@@ -14,6 +14,12 @@ metadata:
   author: Signal Lab
   homepage: https://first-livid-omega.vercel.app/
   registry: io.github.VZezelin/signal-lab-apify-tools
+  platforms:
+    - openclaw
+    - mcp
+    - claude
+    - openai
+    - cursor
 ---
 
 # Signal Lab Apify Tools
