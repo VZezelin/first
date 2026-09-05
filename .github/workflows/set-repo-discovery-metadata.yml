@@ -1,0 +1,36 @@
+name: Set Signal Lab repository discovery metadata
+
+on:
+  push:
+    paths:
+      - '.github/workflows/set-repo-discovery-metadata.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Set description and topics through GitHub API
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo='VZezelin/first'
+          h=(-H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28')
+          body=$(mktemp)
+          code=$(curl -sS -o "$body" -w '%{http_code}' -X PATCH "${h[@]}" \
+            https://api.github.com/repos/$repo \
+            -d '{"description":"Signal Lab — developer-first Apify data APIs, Agent Skill, and MCP tools","homepage":"https://first-livid-omega.vercel.app"}')
+          echo "REPO_METADATA_HTTP=$code"
+          cat "$body"; echo
+          test "$code" = 200
+          body2=$(mktemp)
+          code2=$(curl -sS -o "$body2" -w '%{http_code}' -X PUT "${h[@]}" \
+            https://api.github.com/repos/$repo/topics \
+            -d '{"names":["apify","mcp","model-context-protocol","agent-skills","web-scraping","data-api","rag"]}')
+          echo "REPO_TOPICS_HTTP=$code2"
+          cat "$body2"; echo
+          test "$code2" = 200
