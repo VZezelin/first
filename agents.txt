@@ -1,0 +1,4 @@
+# Signal Lab agent capabilities
+Skills: https://raw.githubusercontent.com/VZezelin/first/main/skills/signal-lab-apify-tools/SKILL.md
+Skills: https://raw.githubusercontent.com/VZezelin/first/main/skills/youtube-transcript-api/SKILL.md
+MCP: https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor

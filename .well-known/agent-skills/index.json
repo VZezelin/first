@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "signal-lab-apify-tools",
+      "type": "skill-md",
+      "description": "Route bounded public-data work through Signal Lab's focused Apify Actors and hosted MCP tools.",
+      "url": "https://raw.githubusercontent.com/VZezelin/first/main/skills/signal-lab-apify-tools/SKILL.md",
+      "digest": "sha256:9b261acd4aa1dcd8f68f25639adf9c25c111c15f1b50b6dff197fffa69ea113d"
+    },
+    {
+      "name": "youtube-transcript-api",
+      "type": "skill-md",
+      "description": "Use the Signal Lab YouTube Transcript API for available public captions, timestamps, Python, RAG, and LangChain workflows.",
+      "url": "https://raw.githubusercontent.com/VZezelin/first/main/skills/youtube-transcript-api/SKILL.md",
+      "digest": "sha256:7d26524ca9d828a2c8b5f4397290b6e88482d9f17086e035f24c6dd4769c44db"
+    }
+  ]
+}
