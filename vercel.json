@@ -5,6 +5,14 @@
       "destination": "/api/view?discovery=agent-skills"
     },
     {
+      "source": "/.well-known/skills/index.json",
+      "destination": "/api/view?discovery=skills-legacy"
+    },
+    {
+      "source": "/.well-known/skills/signal-lab-apify-tools/SKILL.md",
+      "destination": "/skills/signal-lab-apify-tools/SKILL.md"
+    },
+    {
       "source": "/.well-known/api-catalog",
       "destination": "/api/view?discovery=api-catalog"
     }
@@ -41,6 +49,32 @@
       ]
     },
     {
+      "source": "/.well-known/skills/index.json",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/skills/signal-lab-apify-tools/SKILL.md",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/.well-known/api-catalog",
       "headers": [
         {
@@ -62,7 +96,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </llms.txt>; rel=\"describedby\"; type=\"text/markdown\", </.well-known/agent-skills/index.json>; rel=\"alternate\"; type=\"application/json\""
+          "value": "</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </llms.txt>; rel=\"describedby\"; type=\"text/markdown\", </.well-known/agent-skills/index.json>; rel=\"alternate\"; type=\"application/json\", </.well-known/skills/index.json>; rel=\"alternate\"; type=\"application/json\""
         }
       ]
     },
@@ -95,4 +129,3 @@
     }
   ]
 }
-
