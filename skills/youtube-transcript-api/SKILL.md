@@ -1,5 +1,7 @@
 ---
 name: youtube-transcript-api
+slug: youtube-transcript-api
+version: 1.0.0
 description: Use the Signal Lab YouTube Transcript API on Apify when an agent needs available public YouTube captions, timestamped transcript segments, language selection, transcript metadata, JSON/CSV output, or transcript ingestion for Python, RAG, LangChain, research, summarization, and semantic search. Use for public caption extraction, not speech-to-text when a video has no accessible caption track.
 license: MIT
 compatibility: Requires network access and the user's own Apify authentication for paid Actor or MCP execution. Never use or request Signal Lab owner credentials.
