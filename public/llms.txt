@@ -1,0 +1,27 @@
+# Signal Lab — Apify Data APIs and MCP Tools
+
+> Developer-first public-data tools on Apify for AI agents, automation, RAG, ecommerce monitoring, search research, transcripts, jobs, Reddit, and restaurant data.
+
+Canonical site: https://first-livid-omega.vercel.app/
+Apify Store profile: https://apify.com/signal_lab
+Official MCP Registry package: io.github.VZezelin/signal-lab-apify-tools
+MCP Registry: https://registry.modelcontextprotocol.io/?q=io.github.VZezelin%2Fsignal-lab-apify-tools
+
+## Tools
+
+- Amazon Price Tracker: https://apify.com/signal_lab/amazon-price-tracker
+- Google Autocomplete Buyer-Intent API: https://apify.com/signal_lab/google-autocomplete-keywords
+- Website to Markdown API for RAG/LLMs: https://apify.com/signal_lab/website-to-markdown-crawler
+- YouTube Transcript API: https://apify.com/signal_lab/youtube-transcript-scraper
+- Reddit Search & Comments API: https://apify.com/signal_lab/reddit-search-comments
+- Job Vacancy Scraper: https://apify.com/signal_lab/job-vacancy-scraper
+- Restaurant Menu Extractor: https://apify.com/signal_lab/restaurant-menu-extractor
+
+## Agent Skill
+
+OpenAgentSkill: https://www.openagentskill.com/skills/vzezelin-first-signal-lab-apify-tools
+Skill source: https://github.com/VZezelin/first/tree/main/skills/signal-lab-apify-tools
+
+## Usage
+
+Use each Actor's live Apify Pricing tab as the source of truth for pricing. MCP and Actor execution require the user's own Apify authentication. No owner credentials are embedded or proxied. Use public data responsibly and follow applicable site terms, privacy rules, copyright requirements, and law.
