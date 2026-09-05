@@ -1,6 +1,6 @@
-# Amazon Price Tracker API: daily price, stock and price-drop monitoring
+# Amazon Price Tracker API: daily price, availability and price-drop monitoring
 
-Use the Signal Lab Amazon Price Tracker Actor when you need an API-driven workflow for checking Amazon product price and availability by ASIN or product URL, keeping an observed price history, or triggering price-drop / stock-change automation.
+Use the Signal Lab Amazon Price Tracker Actor when you need an API-driven workflow for checking Amazon product price and availability by ASIN or product URL, keeping an observed price history, or triggering price-drop automation.
 
 **Live Actor:** https://apify.com/signal_lab/amazon-price-tracker
 
@@ -19,7 +19,7 @@ curl -X POST \
   }'
 ```
 
-A result can include ASIN, current price, currency, previous price, price-change amount/percentage, availability, rating, review count, brand, URL, and timestamp.
+A result can include ASIN, current price, currency, previous price, price-change amount/percentage, current availability, rating, review count, brand, URL, and timestamp.
 
 ## Daily price and availability monitoring
 
@@ -30,11 +30,13 @@ A result can include ASIN, current price, currency, previous price, price-change
 
 This creates an observed timeline of price and availability checks without requiring you to maintain your own Amazon scraper infrastructure.
 
-## Price-drop and stock-change automation
+## Price-drop and availability workflows
 
-For later checks, `emitOnlyChanges: true` can reduce downstream noise when a tracked price changes. Connect successful rows to a webhook, Make, n8n, Slack, email, or your own backend for alerts and follow-up logic.
+For price-change alerts, set `emitOnlyChanges: true` on later checks to reduce downstream noise when a tracked price changes. Connect successful rows to a webhook, Make, n8n, Slack, email, or your own backend.
 
-## Price history
+For availability monitoring, keep the scheduled observations you need and compare the returned `availability` values downstream over time. Do not assume `emitOnlyChanges` emits availability-only changes; use the current live Actor behavior as the source of truth.
+
+## Price and availability history
 
 Persist scheduled results in your own analytics destination to build a time series of observed Amazon prices and availability. Keep source timestamps and ASINs so you can compare checks over time.
 
