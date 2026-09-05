@@ -1,0 +1,38 @@
+name: Verify YouTube askill 1.0.1 propagation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-youtube-askill-101.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify propagated metadata and buyer-intent position
+        shell: bash
+        run: |
+          set -euo pipefail
+          sleep 15
+          npx --yes askill-cli info @VZezelin/youtube-transcript-api --json > /tmp/info.json
+          npx --yes askill-cli find youtube transcript --limit 100 --json > /tmp/find.json
+          python3 - <<'PY'
+          import json
+          s=json.load(open('/tmp/info.json'))['skill']
+          print('ASKILL_VERSION='+str(s.get('version')))
+          print('ASKILL_TAGS='+','.join(s.get('tags') or []))
+          data=json.load(open('/tmp/find.json'))
+          skills=data.get('skills') or []
+          pos=[i+1 for i,x in enumerate(skills) if x.get('owner')=='VZezelin' and x.get('name')=='youtube-transcript-api']
+          print('ASKILL_BUYER_QUERY_FOUND='+('true' if pos else 'false'))
+          if pos:
+              x=skills[pos[0]-1]
+              print('ASKILL_BUYER_QUERY_POSITION='+str(pos[0]))
+              print('ASKILL_AI_SCORE='+str(x.get('aiScore')))
+          assert s.get('version')=='1.0.1', s
+          assert {'youtube','transcript','captions','api','rag','langchain'}.issubset(set(s.get('tags') or [])), s
+          print('ASKILL_101_PROPAGATED=true')
+          PY
