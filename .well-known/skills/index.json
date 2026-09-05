@@ -1,0 +1,9 @@
+{
+  "skills": [
+    {
+      "name": "signal-lab-apify-tools",
+      "description": "Use Signal Lab's focused Apify data APIs or Official MCP tools for public YouTube captions, website-to-Markdown RAG ingestion, known job-posting extraction, Amazon price tracking, Google Autocomplete research, Reddit research, and restaurant menu extraction.",
+      "files": ["SKILL.md"]
+    }
+  ]
+}
