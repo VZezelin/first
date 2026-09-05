@@ -1,0 +1,42 @@
+name: Submit Signal Lab skill to askill
+
+on:
+  push:
+    paths:
+      - '.github/workflows/submit-askill.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Submit exact Signal Lab skill once
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload='{"url":"https://github.com/VZezelin/first/tree/main/skills/signal-lab-apify-tools"}'
+          code=$(curl -sS -o /tmp/askill.json -w '%{http_code}' \
+            -X POST 'https://askill.sh/api/v1/submit' \
+            -H 'Content-Type: application/json' \
+            -H 'User-Agent: askill-cli' \
+            --data "$payload")
+          echo "ASKILL_HTTP=$code"
+          cat /tmp/askill.json
+          echo
+          test "$code" -ge 200 -a "$code" -lt 300
+          jq -e '.repoOwner == "VZezelin" and .repoName == "first" and (.skills | type == "array")' /tmp/askill.json >/dev/null
+          mkdir -p distribution
+          jq '{repoOwner, repoName, message, skills, receivedAt: (now | todateiso8601)}' /tmp/askill.json > distribution/askill-receipt.json
+      - name: Commit askill receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add distribution/askill-receipt.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record askill submission receipt'
+          git push
