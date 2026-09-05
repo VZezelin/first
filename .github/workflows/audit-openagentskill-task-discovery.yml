@@ -1,0 +1,35 @@
+name: Audit OpenAgentSkill task discovery
+
+on:
+  push:
+    paths:
+      - '.github/workflows/audit-openagentskill-task-discovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check buyer-intent task queries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, urllib.parse, urllib.request
+          slug='vzezelin-first-signal-lab-apify-tools'
+          queries=['youtube transcript api','website to markdown rag','amazon price tracker api']
+          for q in queries:
+              url='https://www.openagentskill.com/api/skills/search?'+urllib.parse.urlencode({'q':q,'limit':20})
+              with urllib.request.urlopen(url, timeout=30) as r:
+                  d=json.load(r)
+              skills=d.get('skills') or []
+              hit=next((s for s in skills if s.get('slug')==slug), None)
+              label=q.upper().replace(' ','_')
+              print(f'{label}_FOUND='+('true' if hit else 'false'))
+              if hit:
+                  print(f'{label}_RANK={hit.get("rank")}')
+                  print(f'{label}_MATCH_SCORE={hit.get("match_score")}')
+                  print(f'{label}_MATCH_TYPE={hit.get("match_type")}')
+          PY
