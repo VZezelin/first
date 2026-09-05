@@ -10,7 +10,7 @@
     },
     {
       "source": "/.well-known/skills/signal-lab-apify-tools/SKILL.md",
-      "destination": "/skills/signal-lab-apify-tools/SKILL.md"
+      "destination": "/api/view?discovery=skills-legacy-skill"
     },
     {
       "source": "/.well-known/api-catalog",
