@@ -1,0 +1,30 @@
+name: Update YouTube askill discovery from immutable source
+
+on:
+  push:
+    paths:
+      - '.github/workflows/update-youtube-askill-discovery-pinned.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish pinned 1.0.1 and verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          src='https://github.com/VZezelin/first/blob/5b9e890dd52c8ce4fad2ad0d812ae1888f79cd1a/skills/youtube-transcript-api/SKILL.md'
+          npx --yes askill-cli publish --github "$src"
+          npx --yes askill-cli info @VZezelin/youtube-transcript-api --json > /tmp/info.json
+          python3 - <<'PY'
+          import json
+          s=json.load(open('/tmp/info.json'))['skill']
+          print('ASKILL_VERSION='+str(s.get('version')))
+          print('ASKILL_TAGS='+','.join(s.get('tags') or []))
+          assert s.get('version')=='1.0.1', s
+          assert set(['youtube','transcript','captions','api','rag','langchain']).issubset(set(s.get('tags') or [])), s
+          print('ASKILL_PINNED_UPDATE_VERIFIED=true')
+          PY
