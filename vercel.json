@@ -3,6 +3,10 @@
     {
       "source": "/.well-known/agent-skills/index.json",
       "destination": "/api/view?discovery=agent-skills"
+    },
+    {
+      "source": "/.well-known/api-catalog",
+      "destination": "/.well-known/api-catalog.json"
     }
   ],
   "redirects": [
