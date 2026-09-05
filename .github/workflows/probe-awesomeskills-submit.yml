@@ -1,0 +1,71 @@
+name: Probe AwesomeSkills public submit contract
+
+on:
+  push:
+    paths:
+      - '.github/workflows/probe-awesomeskills-submit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect public submit frontend without submitting
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import html, json, re, subprocess, urllib.parse, urllib.request
+          base='https://www.awesomeskills.dev'
+          page=urllib.request.urlopen(base+'/en/submit', timeout=20).read().decode('utf-8','replace')
+          scripts=[]
+          for src in re.findall(r'<script[^>]+src=["\']([^"\']+)', page):
+              scripts.append(urllib.parse.urljoin(base, html.unescape(src)))
+          findings=[]
+          pats=[
+              r'https://www\.awesomeskills\.dev/[A-Za-z0-9_./?=&%-]+',
+              r'/api/[A-Za-z0-9_./?=&%-]+',
+              r'githubUrl', r'github_url', r'repositoryUrl', r'Submit Skill',
+              r'Next-Action', r'formAction', r'action=' 
+          ]
+          for u in scripts:
+              try:
+                  txt=urllib.request.urlopen(u, timeout=20).read().decode('utf-8','replace')
+              except Exception:
+                  continue
+              if not any(k in txt for k in ['Submit Skill','githubUrl','github_url','repositoryUrl','/api/','Next-Action']):
+                  continue
+              for p in pats:
+                  for m in re.finditer(p, txt):
+                      s=max(0,m.start()-220); e=min(len(txt),m.end()+320)
+                      snippet=re.sub(r'\s+',' ',txt[s:e])
+                      findings.append({'script':u,'match':m.group(0),'context':snippet[:900]})
+          # Also inspect HTML form/action attributes.
+          for m in re.finditer(r'<form\b[^>]*>', page, re.I):
+              findings.append({'script':'HTML','match':'form','context':re.sub(r'\s+',' ',m.group(0))[:900]})
+          # Deduplicate and cap; this is public frontend metadata only.
+          seen=set(); out=[]
+          for x in findings:
+              key=(x['script'],x['match'],x['context'])
+              if key in seen: continue
+              seen.add(key); out.append(x)
+              if len(out)>=40: break
+          with open('distribution/awesomeskills-submit-contract.json','w') as f:
+              json.dump({'page':base+'/en/submit','scriptCount':len(scripts),'findings':out},f,indent=2)
+          print(json.dumps({'scriptCount':len(scripts),'findingCount':len(out)}))
+          if not out:
+              raise SystemExit('No submit contract hints found')
+          PY
+      - name: Commit sanitized public-contract probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add distribution/awesomeskills-submit-contract.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Record AwesomeSkills public submit contract probe'
+          git push
