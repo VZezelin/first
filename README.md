@@ -24,8 +24,8 @@ Developer-first **Apify Actors and MCP tools** for Amazon price tracking, Google
 
 Signal Lab also ships a portable Agent Skill that teaches compatible agents when and how to route public-data work through the focused Apify Actors and Official MCP tools without embedding owner credentials.
 
-**Indexed in askill:** https://askill.sh/skills/703900  
-**OpenAgentSkill registry:** https://www.openagentskill.com/skills/vzezelin-first-signal-lab-apify-tools
+**Verified external Agent Skill listing:** https://askill.sh/skills/703900  
+**OpenAgentSkill:** submitted for review; not counted here as a verified public listing until independent read-back confirms it.
 
 Install from the verified askill registry entry:
 
