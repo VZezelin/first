@@ -1,0 +1,231 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Signal Lab Website to Markdown API",
+    "version": "1.0.0",
+    "description": "Run the public Signal Lab Website to Markdown Crawler on Apify and receive clean Markdown plus source metadata for RAG, LLM, semantic-search, and indexing workflows. Current pricing and input limits on the Apify Actor page are the source of truth."
+  },
+  "servers": [
+    {
+      "url": "https://api.apify.com/v2"
+    }
+  ],
+  "paths": {
+    "/actors/signal_lab~website-to-markdown-crawler/run-sync-get-dataset-items": {
+      "post": {
+        "operationId": "crawlWebsiteToMarkdown",
+        "summary": "Crawl public pages to clean Markdown",
+        "description": "Runs the Signal Lab Website to Markdown Crawler synchronously on Apify. Use bounded inputs; the call can wait up to the Apify synchronous-run limit. Authentication and billing are handled by Apify.",
+        "security": [
+          {
+            "apifyBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrawlInput"
+              },
+              "examples": {
+                "singlePage": {
+                  "summary": "One-page RAG ingestion",
+                  "value": {
+                    "startUrls": [
+                      {
+                        "url": "https://example.com"
+                      }
+                    ],
+                    "maxPages": 1,
+                    "maxDepth": 0,
+                    "sameDomainOnly": true,
+                    "useSitemaps": false,
+                    "respectRobotsTxt": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Dataset items produced by the Actor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarkdownPage"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing or invalid Apify authentication"
+          },
+          "408": {
+            "description": "Synchronous run exceeded the platform wait limit"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apifyBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Apify API token",
+        "description": "Use your own Apify API token. Never embed owner credentials in clients or public files."
+      }
+    },
+    "schemas": {
+      "CrawlInput": {
+        "type": "object",
+        "required": [
+          "startUrls"
+        ],
+        "properties": {
+          "startUrls": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "maxPages": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5000,
+            "default": 100
+          },
+          "maxDepth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 20,
+            "default": 2
+          },
+          "sameDomainOnly": {
+            "type": "boolean",
+            "default": true
+          },
+          "useSitemaps": {
+            "type": "boolean",
+            "default": true
+          },
+          "respectRobotsTxt": {
+            "type": "boolean",
+            "default": true
+          },
+          "includePatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excludePatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "removeSelectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "MarkdownPage": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "finalUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "statusCode": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "canonicalUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "language": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "headings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "markdown": {
+            "type": "string"
+          },
+          "textLength": {
+            "type": "integer"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "jsonLd": {
+            "type": "array",
+            "items": {}
+          },
+          "depth": {
+            "type": "integer"
+          },
+          "scrapedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Live Actor page and pricing",
+    "url": "https://apify.com/signal_lab/website-to-markdown-crawler"
+  }
+}
