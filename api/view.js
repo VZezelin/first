@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const ALLOWED_PAGES = new Set(['home','youtube','website','jobs']);
 const agentSkillsIndex = require('../agent-skills-index.json');
+const websiteOpenApi = require('../website-to-markdown-openapi.json');
 
 const legacySkillsIndex = {
   skills: [
@@ -79,6 +80,13 @@ module.exports = async function handler(req, res) {
     res.setHeader('Content-Type', 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"');
     res.setHeader('Link', '</.well-known/api-catalog>; rel="api-catalog"');
     return res.status(200).send(JSON.stringify(apiCatalog));
+  }
+
+  if (req.method === 'GET' && discovery === 'website-openapi') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.status(200).json(websiteOpenApi);
   }
 
   if (req.method !== 'POST') {
