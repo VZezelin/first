@@ -15,6 +15,10 @@
     {
       "source": "/.well-known/api-catalog",
       "destination": "/api/view?discovery=api-catalog"
+    },
+    {
+      "source": "/website-to-markdown-openapi.json",
+      "destination": "/api/view?discovery=website-openapi"
     }
   ],
   "redirects": [
@@ -92,11 +96,24 @@
       ]
     },
     {
+      "source": "/website-to-markdown-openapi.json",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/",
       "headers": [
         {
           "key": "Link",
-          "value": "</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </llms.txt>; rel=\"describedby\"; type=\"text/markdown\", </.well-known/agent-skills/index.json>; rel=\"alternate\"; type=\"application/json\", </.well-known/skills/index.json>; rel=\"alternate\"; type=\"application/json\""
+          "value": "</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </llms.txt>; rel=\"describedby\"; type=\"text/markdown\", </.well-known/agent-skills/index.json>; rel=\"alternate\"; type=\"application/json\", </.well-known/skills/index.json>; rel=\"alternate\"; type=\"application/json\", </website-to-markdown-openapi.json>; rel=\"service-desc\"; type=\"application/json\""
         }
       ]
     },
@@ -114,7 +131,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", <https://raw.githubusercontent.com/VZezelin/first/main/website-to-markdown-api.md>; rel=\"alternate\"; type=\"text/markdown\""
+          "value": "</llms.txt>; rel=\"describedby\"; type=\"text/markdown\", <https://raw.githubusercontent.com/VZezelin/first/main/website-to-markdown-api.md>; rel=\"alternate\"; type=\"text/markdown\", </website-to-markdown-openapi.json>; rel=\"service-desc\"; type=\"application/json\""
         }
       ]
     },
