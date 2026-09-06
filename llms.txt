@@ -14,6 +14,10 @@ Use the pages below to understand each tool before calling it. Do not assume una
 - [Reddit Search & Comments](https://apify.com/signal_lab/reddit-search-comments): Search public Reddit content and collect comments for research workflows.
 - [Restaurant Menu Extractor](https://apify.com/signal_lab/restaurant-menu-extractor): Extract structured menu data from supported public restaurant pages.
 
+## Machine-readable API discovery
+
+- [Website to Markdown OpenAPI 3.1](https://first-livid-omega.vercel.app/website-to-markdown-openapi.json): Machine-readable contract for the live Apify Actor, using the official Apify synchronous Actor-run API and bearer authentication. No owner credentials are embedded.
+
 ## Markdown developer guides
 
 - [YouTube Transcript API guide](https://raw.githubusercontent.com/VZezelin/first/main/youtube-transcript-api.md): Raw Markdown developer documentation.
