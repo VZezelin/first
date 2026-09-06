@@ -3,6 +3,7 @@ const path = require('node:path');
 const ALLOWED_PAGES = new Set(['home','youtube','website','jobs']);
 const agentSkillsIndex = require('../agent-skills-index.json');
 const websiteOpenApi = require('../website-to-markdown-openapi.json');
+const mcpConfig = require('../mcp.json');
 
 const legacySkillsIndex = {
   skills: [
@@ -30,6 +31,16 @@ const apiCatalog = {
       ],
     },
   ],
+};
+
+const mcpManifest = {
+  server: {
+    name: 'Signal Lab Apify Data Tools',
+    description: 'Remote MCP bundle of Signal Lab Apify data tools for Amazon price tracking, Google Autocomplete, website-to-Markdown, YouTube transcripts, Reddit research, public job postings, and restaurant menus.',
+    endpoints: {
+      'streamable-http': mcpConfig.mcpServers['signal-lab'].url,
+    },
+  },
 };
 
 function referrerHost(value) {
@@ -87,6 +98,20 @@ module.exports = async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     return res.status(200).json(websiteOpenApi);
+  }
+
+  if (req.method === 'GET' && discovery === 'mcp') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.status(200).json(mcpManifest);
+  }
+
+  if (req.method === 'GET' && discovery === 'mcp-config') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.status(200).json(mcpConfig);
   }
 
   if (req.method !== 'POST') {
