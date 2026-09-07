@@ -165,6 +165,29 @@ Useful for:
 
 The dedicated guide includes the current input fields, a copy-paste API call, and the focused MCP configuration.
 
+## 5. Job Posting Scraper API — structured vacancy data from a public job URL
+
+**Run in Store:** https://apify.com/signal_lab/job-vacancy-scraper  
+**API guide:** [job-posting-scraper-api.md](./job-posting-scraper-api.md)
+
+Use it when you already have public vacancy URLs and need structured fields for ATS ingestion, recruiting automation, hiring-market monitoring, or downstream CSV/JSON workflows. The Actor can return job title, company, location, salary/currency when present, employment type, published/valid-through dates, source URL, and structured `JobPosting` metadata exposed by the page. Missing source fields are not invented.
+
+Minimal API call:
+
+```bash
+curl -X POST \
+  "https://api.apify.com/v2/acts/signal_lab~job-vacancy-scraper/runs" \
+  -H "Authorization: Bearer $APIFY_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": ["https://example.com/public-job-posting"],
+    "maxJobs": 5,
+    "maxItems": 5
+  }'
+```
+
+This is a page-to-structured-data workflow; it does not claim to search every job board or bypass login walls.
+
 ## MCP / AI-agent usage
 
 The Official MCP Registry entry above is the canonical discovery record for this Signal Lab tool bundle. You can also configure the same Apify-hosted endpoint directly in MCP-compatible clients.
