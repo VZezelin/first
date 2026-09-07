@@ -2,7 +2,9 @@
 
 Use the Signal Lab Job Vacancy Scraper when you already have a public job-posting URL and need structured fields for recruiting automation, hiring-market monitoring, ATS ingestion, analysis, or export.
 
-**Live Actor:** https://apify.com/signal_lab/job-vacancy-scraper
+**Run now on Apify:** https://apify.com/signal_lab/job-vacancy-scraper
+
+If you only need to test one public vacancy, open the Actor, paste the job URL, keep the run small, and inspect the dataset before automating it through the API.
 
 ## Best-fit use cases
 
