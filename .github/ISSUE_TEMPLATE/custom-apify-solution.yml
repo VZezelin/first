@@ -1,0 +1,58 @@
+name: Custom Apify solution request
+description: Request a scoped public-data scraping, API, automation, or MCP workflow from Signal Lab.
+title: "[Solution request] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for a concrete Apify/web-data problem that is not already solved by a public Signal Lab Actor. Please do not post passwords, API tokens, private datasets, personal data, or confidential business information. Public URLs and sanitized examples are enough for initial scoping.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What result or workflow do you need?
+      placeholder: "Example: monitor public product pages daily and return only price changes through an Apify dataset/webhook."
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Public source examples
+      description: Share public URLs or domains that illustrate the source. Do not include credentials or private links.
+      placeholder: "https://example.com/..."
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Required output
+      description: List the fields, format, API/MCP integration, schedule, or downstream system you need.
+      placeholder: "JSON fields, CSV columns, webhook payload, MCP tool behavior, etc."
+    validations:
+      required: true
+  - type: dropdown
+    id: cadence
+    attributes:
+      label: Expected cadence
+      options:
+        - One-time extraction
+        - Scheduled recurring run
+        - API on demand
+        - MCP / AI-agent tool
+        - Not sure yet
+    validations:
+      required: true
+  - type: textarea
+    id: scale
+    attributes:
+      label: Approximate scale
+      description: Give a rough public-data volume so the solution can be scoped safely and economically.
+      placeholder: "Example: 100 URLs/day, 5,000 records/week."
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Data and access confirmation
+      options:
+        - label: I am requesting work only against public/lawfully accessible data and will not provide credentials, secrets, or instructions to bypass access controls.
+          required: true
