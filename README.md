@@ -2,6 +2,8 @@
 
 Developer-first **Apify Actors and MCP tools** for Amazon price tracking, Google Autocomplete, website-to-Markdown/RAG, YouTube transcripts, Reddit search/comments, public job postings, and restaurant menus.
 
+[![AllMCPs](https://allmcps.com/api/badge/signal-lab-apify-tools?style=directory)](https://allmcps.com/mcp/signal-lab-apify-tools)
+
 ## Start here
 
 | Need | Run now | API guide |
