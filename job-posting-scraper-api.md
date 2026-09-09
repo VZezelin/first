@@ -4,6 +4,10 @@ Use the Signal Lab Job Vacancy Scraper when you already have a public job-postin
 
 **Live Actor:** https://apify.com/signal_lab/job-vacancy-scraper
 
+**No-code Example Task:** https://console.apify.com/actors/tasks/ejCZfw8L0jgW7v4Fl
+
+Open the public Example Task when you want to start from a preconfigured job-posting export workflow instead of building the Actor input from scratch. The Task still runs the same live Signal Lab Actor, so inspect the Actor's current Pricing tab before execution.
+
 ## Best-fit use cases
 
 - normalize public job pages before importing them into an ATS or internal database
