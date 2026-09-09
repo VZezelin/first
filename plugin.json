@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "signal-lab-apify-tools",
+  "version": "1.0.0",
+  "description": "Developer-first Apify data APIs, Agent Skill, and MCP tools for public-data workflows including RAG, ecommerce, search, video, Reddit, jobs, and restaurant menus.",
+  "author": {
+    "name": "Signal Lab",
+    "url": "https://apify.com/signal_lab"
+  },
+  "homepage": "https://first-livid-omega.vercel.app/",
+  "repository": "https://github.com/VZezelin/first",
+  "keywords": [
+    "apify",
+    "mcp",
+    "agent-skills",
+    "web-scraping",
+    "data-api",
+    "rag"
+  ]
+}
