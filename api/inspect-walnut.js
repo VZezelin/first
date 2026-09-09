@@ -1,46 +1,19 @@
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end();
   try {
-    const base = 'https://walnut.world';
-    const page = await fetch(base + '/', { headers: { 'user-agent': 'SignalLab/1.0 (public submission contract inspection)' }, redirect: 'follow' });
-    const html = await page.text();
-    const lowerHtml = html.toLowerCase();
-    const htmlSnippets = [];
-    for (const needle of ['<form', 'action=', 'method=', 'github.com/owner/repo', 'index it', '/api/', 'source_url', 'sourceurl', 'name=']) {
-      let from = 0;
-      while (htmlSnippets.length < 80) {
-        const i = lowerHtml.indexOf(needle.toLowerCase(), from);
-        if (i < 0) break;
-        htmlSnippets.push(html.slice(Math.max(0, i - 900), Math.min(html.length, i + 2400)));
-        from = i + needle.length;
-      }
-    }
-    const scripts = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
-    const results = [];
-    for (const src of scripts.slice(0, 40)) {
-      const url = src.startsWith('http') ? src : base + src;
-      try {
-        const r = await fetch(url, { headers: { 'user-agent': 'SignalLab/1.0 (public submission contract inspection)' } });
-        const js = await r.text();
-        const lower = js.toLowerCase();
-        if (!['index it','/api/','fetch(','sourceurl','source_url','github.com/owner/repo','ownership remains unclaimed'].some((n) => lower.includes(n))) continue;
-        const snippets = [];
-        for (const needle of ['fetch(', '/api/', 'source_url', 'sourceurl', 'github.com/owner/repo', 'index it']) {
-          let from = 0;
-          while (snippets.length < 40) {
-            const i = lower.indexOf(needle.toLowerCase(), from);
-            if (i < 0) break;
-            snippets.push(js.slice(Math.max(0, i - 700), Math.min(js.length, i + 1800)));
-            from = i + needle.length;
-          }
-        }
-        results.push({ url, status: r.status, length: js.length, snippets });
-      } catch (e) {
-        results.push({ url, error: e instanceof Error ? e.message : String(e) });
-      }
-    }
+    const body = new URLSearchParams({ url: 'https://github.com/VZezelin/first' });
+    const response = await fetch('https://walnut.world/api/index/submit', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'user-agent': 'SignalLab/1.0 (public source indexing)'
+      },
+      body,
+      redirect: 'manual'
+    });
+    const text = await response.text();
     res.setHeader('Cache-Control', 'no-store');
-    return res.status(200).json({ pageStatus: page.status, finalUrl: page.url, contentType: page.headers.get('content-type'), length: html.length, htmlSnippets, scripts, results });
+    return res.status(200).json({ upstreamStatus: response.status, location: response.headers.get('location'), contentType: response.headers.get('content-type'), text: text.slice(0, 5000) });
   } catch (error) {
     return res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
   }
