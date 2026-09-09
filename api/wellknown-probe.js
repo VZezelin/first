@@ -57,7 +57,7 @@ module.exports = async function handler(req, res) {
             name: 'Signal Lab Apify MCP Tools',
             kind: 'mcp_server',
             summary: 'Developer-first Apify data APIs and MCP tools for web data, research, monitoring, and AI agent workflows.',
-            endpoints: [{ url: mcpUrl, type: 'mcp' }],
+            endpoints: [{ url: mcpUrl, type: 'mcp_streamable_http' }],
             protocols: ['mcp'],
             tags: ['apify', 'web-scraping', 'data-api', 'mcp', 'ai-agents'],
             repository: repo,
