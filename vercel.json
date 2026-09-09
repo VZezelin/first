@@ -21,6 +21,10 @@
       "destination": "/api/view?discovery=mcp"
     },
     {
+      "source": "/.well-known/mcp/server.json",
+      "destination": "/api/view?discovery=mcp-registry-server"
+    },
+    {
       "source": "/mcp.json",
       "destination": "/api/view?discovery=mcp-config"
     },
@@ -78,6 +82,13 @@
     },
     {
       "source": "/.well-known/mcp.json",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Content-Type", "value": "application/json; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/.well-known/mcp/server.json",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Content-Type", "value": "application/json; charset=utf-8" }
