@@ -4,24 +4,23 @@ module.exports = async function handler(req, res) {
     return res.status(405).end();
   }
   try {
-    const url = 'https://skillworks.thecompound.tech/_next/static/chunks/app/submit/page-79448354d6132e79.js';
-    const response = await fetch(url, {
-      headers: { 'user-agent': 'SignalLab/1.0 (public submission contract inspection)' }
+    const response = await fetch('https://skillworks.thecompound.tech/api/submit', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'user-agent': 'SignalLab/1.0 (public repository submission)'
+      },
+      body: JSON.stringify({
+        repo_url: 'https://github.com/VZezelin/first',
+        note: 'Signal Lab public repository with standard SKILL.md Agent Skills, Agent Plugins manifest, and MCP discovery metadata for developer-first Apify data/API workflows.',
+        email: '',
+        website: ''
+      })
     });
-    const js = await response.text();
-    const snippets = [];
-    for (const needle of ['fetch(', '/api/', 'repo_url', 'website', 'submission', 'submit']) {
-      let from = 0;
-      while (snippets.length < 50) {
-        const i = js.toLowerCase().indexOf(needle.toLowerCase(), from);
-        if (i < 0) break;
-        snippets.push(js.slice(Math.max(0, i - 500), Math.min(js.length, i + 1400)));
-        from = i + needle.length;
-      }
-    }
+    const body = await response.text();
     res.setHeader('Cache-Control', 'no-store');
-    return res.status(200).json({ upstreamStatus: response.status, length: js.length, snippets });
+    return res.status(200).json({ ok: response.ok, upstreamStatus: response.status, upstreamBody: body.slice(0, 3000) });
   } catch (error) {
-    return res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
+    return res.status(502).json({ ok: false, error: error instanceof Error ? error.message : String(error) });
   }
 };
