@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentic Payments for Signal Lab Actors — x402 & Skyfire on Apify</title>
+<meta name="description" content="Run eligible Signal Lab Apify Actors from AI agents using Apify agentic payments such as x402 or Skyfire, without embedding Signal Lab owner credentials.">
+<meta name="robots" content="index,follow"><link rel="canonical" href="https://first-livid-omega.vercel.app/agentic-payments.html">
+<style>
+:root{--bg:#090b10;--card:#121722;--text:#f7f9fc;--muted:#9ca9bd;--line:#222b3a;--green:#75f0b5;--blue:#72a8ff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}.wrap{max-width:920px;margin:auto;padding:0 24px}nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0}.brand{font-weight:850;font-size:20px;letter-spacing:-.04em}.brand i{font-style:normal;color:var(--green)}a{color:#a9c7ff}.hero{padding:70px 0 36px}.label{color:var(--green);font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.12em}h1{font-size:clamp(40px,7vw,66px);line-height:1.04;letter-spacing:-.05em;margin:14px 0 18px}h2{font-size:28px;letter-spacing:-.03em;margin-top:42px}p,li{color:var(--muted)}.card{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:24px;margin:18px 0}.warn{border-left:3px solid var(--blue);padding-left:16px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0}.btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--line);text-decoration:none;color:var(--text);font-weight:750}.btn.primary{background:var(--green);color:#07110d;border-color:transparent}pre{overflow:auto;padding:18px;border-radius:14px;background:#05070b;border:1px solid var(--line);color:#d9e3ef;font-size:13px}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}footer{margin-top:54px;padding:28px 0;border-top:1px solid var(--line);font-size:13px;color:#7f8ca0}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Agentic Payments for Signal Lab Actors","url":"https://first-livid-omega.vercel.app/agentic-payments.html","about":["Apify","x402","Skyfire","AI agents","web scraping APIs"]}</script>
+</head>
+<body><div class="wrap">
+<nav><a class="brand" href="/">Signal <i>Lab</i></a><a href="/api/go?actor=portfolio">Apify Store →</a></nav>
+<main>
+<section class="hero"><div class="label">AI agents · payment-native execution</div><h1>Let an agent pay for the Actor run.</h1><p>Apify supports agentic payments for eligible Actors, so an AI agent can authenticate and pay for a run without needing the Signal Lab owner's credentials. Apify currently documents x402 and Skyfire flows.</p><div class="actions"><a class="btn primary" href="/api/go?actor=portfolio">Browse Signal Lab Actors →</a><a class="btn" href="https://docs.apify.com/integrations/x402">Apify x402 guide</a><a class="btn" href="https://docs.apify.com/integrations/skyfire">Apify Skyfire guide</a></div></section>
+
+<div class="card warn"><strong>Eligibility is controlled by Apify.</strong><p>Do not assume every Signal Lab Actor is agentic-payment eligible. Apify requires supported pricing/permission settings and developer eligibility, and maintains the authoritative eligibility state. Check the live Store/API before paying.</p><p><a href="https://api.apify.com/v2/store?search=signal_lab&amp;allowsAgenticUsers=true">Check currently eligible Signal Lab results via Apify Store API →</a></p></div>
+
+<h2>x402 path</h2>
+<p>Apify's documented x402 flow purchases a prepaid API token with USDC on Base, then uses that token as a normal bearer credential against the Apify API. The token is the caller's credential; nothing on this site contains or proxies a Signal Lab owner token.</p>
+<pre><code># After following Apify's x402 guide and receiving a prepaid token:
+curl -X POST \
+  'https://api.apify.com/v2/actors/ACTOR_ID/run-sync-get-dataset-items' \
+  -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"your":"actor input"}'</code></pre>
+
+<h2>Skyfire path</h2>
+<p>For Skyfire, Apify documents discovering payment requirements with <code>X-APIFY-PAYMENT-PROTOCOL: SKYFIRE</code>, then running an eligible Actor with a <code>skyfire-pay-id</code> token.</p>
+<pre><code># Discover payment requirements for an eligible Actor:
+curl -si \
+  -H 'X-APIFY-PAYMENT-PROTOCOL: SKYFIRE' \
+  'https://api.apify.com/v2/actors/ACTOR_ID/run-sync-get-dataset-items'
+
+# Then run with the payer's Skyfire PAY token:
+curl -X POST \
+  'https://api.apify.com/v2/actors/ACTOR_ID/run-sync-get-dataset-items' \
+  -H 'skyfire-pay-id: YOUR_SKYFIRE_PAY_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"your":"actor input"}'</code></pre>
+
+<h2>Signal Lab agent surfaces</h2>
+<p>If your client already speaks MCP, connect the hosted Signal Lab bundle instead of building per-Actor plumbing. Apify's MCP documentation also describes agentic-payment options for supported flows.</p>
+<div class="card"><p><strong>MCP endpoint</strong></p><pre><code>https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor</code></pre><p><a href="https://docs.apify.com/integrations/mcp">Official Apify MCP documentation →</a></p></div>
+
+<h2>Business source of truth</h2>
+<p>Execution, payment eligibility, current pricing, and billing are controlled by Apify. Always inspect the live Actor and Apify documentation before authorizing a paid run. This page is a discovery/integration guide, not a guarantee that a specific Actor is currently eligible.</p>
+</main>
+<footer>Signal Lab · developer-first Apify data APIs & MCP tools</footer>
+</div></body></html>
