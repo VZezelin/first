@@ -22,6 +22,10 @@ Developer-first **Apify Actors and MCP tools** for Amazon price tracking, Google
 
 > Pricing can change. Use each Actor's live **Pricing** tab in Apify as the source of truth.
 
+## Need a custom Apify workflow?
+
+If the existing Actors do not fit your use case, [open a custom Apify solution request](https://github.com/VZezelin/first/issues/new?template=custom-apify-solution.yml). Describe the public data source, desired output, frequency, and scale. Do not include credentials, private data, API keys, or other secrets in the public issue.
+
 ## Install as an Agent Skill
 
 Signal Lab also ships a portable Agent Skill that teaches compatible agents when and how to route public-data work through the focused Apify Actors and Official MCP tools without embedding owner credentials.
