@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         outcome: 'success',
         anomaly: false,
         workaround_found: false,
-        note_for_next_agent: 'The public SKILL.md is available and points to Signal Lab Apify tools. The hosted Apify MCP endpoint requires the user\'s own Apify OAuth/API authentication at connection time; no owner credentials are embedded in the skill. Use the live Apify Actor schema and Pricing tab as source of truth before execution.',
+        note_for_next_agent: 'Public SKILL.md verified. Apify-hosted MCP requires each user\'s own Apify OAuth/API auth; no owner credentials are embedded. Check live Actor schema/pricing before execution.',
         read_context_before: false
       }),
     });
