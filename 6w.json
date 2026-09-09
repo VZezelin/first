@@ -1,0 +1,15 @@
+{
+  "name": "Signal Lab Apify Tools",
+  "kind": "MCP Server",
+  "domains": ["Automation & Integration"],
+  "tags": ["Apify", "MCP", "Web-Scraping", "Data-API", "RAG", "Agents"],
+  "six_word_summary": "Apify data APIs for AI agents",
+  "who": "Signal Lab maintains the public integration and its Apify Actor portfolio.",
+  "what": "A remote MCP entry point and developer-facing data APIs for transcripts, web-to-Markdown, price tracking, search intent, and other public-data workflows.",
+  "where": "Runs on Apify; the public GitHub repository carries discovery manifests, Agent Skill metadata, docs, and links.",
+  "when": "Use it when an AI agent or developer needs bounded web data or extraction workflows without building a scraper from scratch.",
+  "why": "It turns common public-data collection tasks into reusable pay-per-use Actor/API calls and MCP-accessible workflows.",
+  "with": "Apify Store Actors, Apify-hosted MCP/OAuth, standard HTTP APIs, and Agent Skills metadata.",
+  "watch": "Remote hosted service; network calls leave the client and Apify authentication/payment may apply. No owner credentials are stored in this repository.",
+  "docs_url": "https://first-livid-omega.vercel.app"
+}
