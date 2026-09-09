@@ -2,8 +2,19 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end();
   try {
     const base = 'https://walnut.world';
-    const page = await fetch(base + '/', { headers: { 'user-agent': 'SignalLab/1.0 (public submission contract inspection)' } });
+    const page = await fetch(base + '/', { headers: { 'user-agent': 'SignalLab/1.0 (public submission contract inspection)' }, redirect: 'follow' });
     const html = await page.text();
+    const lowerHtml = html.toLowerCase();
+    const htmlSnippets = [];
+    for (const needle of ['<form', 'action=', 'method=', 'github.com/owner/repo', 'index it', '/api/', 'source_url', 'sourceurl', 'name=']) {
+      let from = 0;
+      while (htmlSnippets.length < 80) {
+        const i = lowerHtml.indexOf(needle.toLowerCase(), from);
+        if (i < 0) break;
+        htmlSnippets.push(html.slice(Math.max(0, i - 900), Math.min(html.length, i + 2400)));
+        from = i + needle.length;
+      }
+    }
     const scripts = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
     const results = [];
     for (const src of scripts.slice(0, 40)) {
@@ -29,7 +40,7 @@ module.exports = async function handler(req, res) {
       }
     }
     res.setHeader('Cache-Control', 'no-store');
-    return res.status(200).json({ pageStatus: page.status, scripts, results });
+    return res.status(200).json({ pageStatus: page.status, finalUrl: page.url, contentType: page.headers.get('content-type'), length: html.length, htmlSnippets, scripts, results });
   } catch (error) {
     return res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
   }
