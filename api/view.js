@@ -34,12 +34,20 @@ const apiCatalog = {
   ],
 };
 
+const mcpEndpoint = mcpConfig.mcpServers['signal-lab'].url;
+const mcpDescription = 'Remote MCP bundle of Signal Lab Apify data tools for Amazon price tracking, Google Autocomplete, website-to-Markdown, YouTube transcripts, Reddit research, public job postings, and restaurant menus.';
 const mcpManifest = {
+  name: 'Signal Lab Apify Data Tools',
+  description: mcpDescription,
+  url: mcpEndpoint,
+  transport: 'streamable-http',
+  homepage: 'https://first-livid-omega.vercel.app/',
+  repository: 'https://github.com/VZezelin/first',
   server: {
     name: 'Signal Lab Apify Data Tools',
-    description: 'Remote MCP bundle of Signal Lab Apify data tools for Amazon price tracking, Google Autocomplete, website-to-Markdown, YouTube transcripts, Reddit research, public job postings, and restaurant menus.',
+    description: mcpDescription,
     endpoints: {
-      'streamable-http': mcpConfig.mcpServers['signal-lab'].url,
+      'streamable-http': mcpEndpoint,
     },
   },
 };
