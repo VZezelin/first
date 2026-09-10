@@ -1,35 +1,50 @@
+const PAYLOAD = {
+  name: 'Signal Lab Apify Data APIs + MCP',
+  type: 'mcp',
+  source: 'github',
+  github_url: 'https://github.com/VZezelin/first',
+  categories: [
+    'Developer Tools',
+    'Web Scraping & Data Collection',
+    'API Development',
+    'Research',
+    'Productivity & Workflow'
+  ],
+  provider: 'Signal Lab',
+  website: 'https://first-livid-omega.vercel.app',
+  use_cases: [
+    'Extract YouTube transcripts for RAG and LLM workflows',
+    'Convert public websites to clean Markdown for retrieval pipelines',
+    'Fetch structured job posting data and other public web data through Apify Actors',
+    'Use Signal Lab data tools from MCP-compatible AI agents'
+  ],
+  faq: [],
+  try_url: 'https://first-livid-omega.vercel.app',
+  email: 'vitaxastar@gmail.com'
+};
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
   }
 
-  const out = {};
   try {
-    const jsUrl = 'https://mcpagentsmarket.com/_next/static/chunks/551-ddcc0fda423c9ac2.js';
-    const r = await fetch(jsUrl, {
-      headers: { 'user-agent': 'SignalLabSubmissionInspector/1.0', accept: 'application/javascript,*/*' },
-      signal: AbortSignal.timeout(15000),
+    const r = await fetch('https://api.mcpagentsmarket.com/api/submit', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+        'user-agent': 'SignalLabDirectorySubmission/1.0'
+      },
+      body: JSON.stringify(PAYLOAD),
+      signal: AbortSignal.timeout(20000),
     });
-    const js = await r.text();
-    const snippets = [];
-    for (const needle of ['xj', 'fetch(', '/api/', 'submit', 'listing']) {
-      let i = 0;
-      while ((i = js.indexOf(needle, i)) !== -1 && snippets.length < 80) {
-        snippets.push({ needle, text: js.slice(Math.max(0, i - 700), Math.min(js.length, i + 1800)) });
-        i += needle.length;
-      }
-    }
-    out.helper = {
-      status: r.status,
-      jsUrl,
-      apiMatches: [...new Set(js.match(/\/(?:api|submit)[A-Za-z0-9_?&=\-/.]*/g) || [])].slice(0, 100),
-      snippets,
-    };
+    const text = await r.text();
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ ok: r.ok, upstreamStatus: r.status, body: text });
   } catch (error) {
-    out.error = String(error);
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ ok: false, error: String(error) });
   }
-
-  res.setHeader('Cache-Control', 'no-store');
-  return res.status(200).json({ ok: true, out });
 };
