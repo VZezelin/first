@@ -5,7 +5,7 @@ module.exports = async function handler(req, res) {
   }
 
   const endpoint = 'https://botmarket.bot/v1/submit';
-  const sourceUrl = 'https://first-livid-omega.vercel.app/plugin.json';
+  const sourceUrl = 'https://first-livid-omega.vercel.app/.well-known/mcp.json';
 
   try {
     const dry = await fetch(endpoint, {
