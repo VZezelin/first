@@ -1,42 +1,35 @@
-const TARGET = 'https://www.awesomeskills.dev/en/submit';
-
-function collectScripts(html, base) {
-  const out = [];
-  const re = /<script[^>]+src=["']([^"']+)["'][^>]*>/gi;
-  for (const match of html.matchAll(re)) {
-    try { out.push(new URL(match[1], base).toString()); } catch {}
-  }
-  return [...new Set(out)].slice(0, 40);
-}
+const ENDPOINT = 'https://www.awesomeskills.dev/api/v1/submit';
+const SKILL_URL = 'https://github.com/VZezelin/first/tree/main/skills/signal-lab-apify-tools';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
   if (req.method !== 'GET') {
     res.statusCode = 405;
     return res.end(JSON.stringify({ ok: false, error: 'METHOD_NOT_ALLOWED' }));
   }
   try {
-    const page = await fetch(TARGET, { redirect: 'follow', headers: { 'user-agent': 'SignalLabContractInspector/1.0' } });
-    const html = await page.text();
-    const scripts = collectScripts(html, page.url || TARGET);
-    const inspected = [];
-    for (const url of scripts.slice(0, 20)) {
-      try {
-        const r = await fetch(url, { redirect: 'follow', headers: { 'user-agent': 'SignalLabContractInspector/1.0' } });
-        const text = await r.text();
-        if (/submit|github|skill/i.test(text)) {
-          const matches = [...text.matchAll(/.{0,180}(?:\/api\/[A-Za-z0-9_./?=&-]+|fetch\([^)]{0,300}|axios\.[a-z]+\([^)]{0,300}).{0,180}/gsi)]
-            .map((m) => m[0].replace(/\s+/g, ' ').slice(0, 700))
-            .slice(0, 12);
-          if (matches.length) inspected.push({ url, matches });
-        }
-      } catch {}
-    }
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    const upstream = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'user-agent': 'SignalLabSubmission/1.0',
+        'origin': 'https://www.awesomeskills.dev',
+        'referer': 'https://www.awesomeskills.dev/en/submit',
+      },
+      body: JSON.stringify({ url: SKILL_URL }),
+      redirect: 'manual',
+    });
+    const text = await upstream.text();
     res.statusCode = 200;
-    return res.end(JSON.stringify({ ok: true, status: page.status, finalUrl: page.url, scripts, inspected }));
+    return res.end(JSON.stringify({
+      ok: upstream.ok,
+      upstreamStatus: upstream.status,
+      location: upstream.headers.get('location'),
+      body: text.slice(0, 4000),
+    }));
   } catch (error) {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.statusCode = 502;
     return res.end(JSON.stringify({ ok: false, error: error instanceof Error ? error.message : String(error) }));
   }
