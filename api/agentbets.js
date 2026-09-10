@@ -18,10 +18,10 @@ module.exports = async function handler(req, res) {
   }
 
   const payload = {
-    name: 'Signal Lab',
+    site_name: 'Signal Lab',
     url: 'https://first-livid-omega.vercel.app',
     category: 'developer-tools',
-    description: 'Developer-first Apify data APIs and MCP tools for web research, RAG, ecommerce, and automation workflows used by AI agents and builders.',
+    description: 'Developer-first Apify data APIs and MCP tools for AI agents that need web research, RAG ingestion, ecommerce monitoring, search discovery, and automation workflows.',
     contact_email: 'vitaxastar@gmail.com',
     submitter_type: 'agent',
     agent_name: 'ChatGPT',
