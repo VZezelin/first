@@ -8,7 +8,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
   if (mode === 'spec') {
-    const response = await fetch('https://api.agentbets.ai/api/openapi.yaml', { signal: AbortSignal.timeout(15000) });
+    const response = await fetch('https://agentbets.ai/api/openapi.yaml', { signal: AbortSignal.timeout(15000) });
     const text = await response.text();
     return res.status(response.status).send(text);
   }
