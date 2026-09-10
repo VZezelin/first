@@ -1,40 +1,42 @@
-const AUDIT_ID = 'efe907ad-b77a-4bbb-89d2-442100d1ca40';
-
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
   }
 
+  const pageUrl = 'https://mcpagentsmarket.com/submit';
   const out = {};
   try {
-    const r = await fetch('https://mcpagentsmarket.com/submit', {
+    const page = await fetch(pageUrl, {
       headers: { 'user-agent': 'SignalLabSubmissionInspector/1.0', accept: 'text/html,*/*' },
       redirect: 'follow',
       signal: AbortSignal.timeout(15000),
     });
-    const html = await r.text();
-    out.market = {
-      status: r.status,
-      finalUrl: r.url,
-      apiMatches: [...new Set(html.match(/\/(?:api|submit)[A-Za-z0-9_?&=\-/.]*/g) || [])].slice(0, 100),
-      forms: [...html.matchAll(/<form[\s\S]{0,5000}?<\/form>/gi)].map((m) => m[0]).slice(0, 5),
-      scripts: [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]).slice(0, 50),
-      htmlHead: html.slice(0, 20000),
-    };
+    const html = await page.text();
+    const scripts = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
+    const submitScript = scripts.find((s) => s.includes('/app/submit/page-'));
+    out.page = { status: page.status, submitScript, scripts };
+    if (submitScript) {
+      const jsUrl = new URL(submitScript, page.url).toString();
+      const jsResp = await fetch(jsUrl, {
+        headers: { 'user-agent': 'SignalLabSubmissionInspector/1.0', accept: 'application/javascript,*/*' },
+        signal: AbortSignal.timeout(15000),
+      });
+      const js = await jsResp.text();
+      const apiMatches = [...new Set(js.match(/\/(?:api|submit)[A-Za-z0-9_?&=\-/.]*/g) || [])];
+      const urlMatches = [...new Set(js.match(/https?:\\?\/\\?\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;=%-]+/g) || [])];
+      const snippets = [];
+      for (const needle of ['fetch(', '/api/', 'submit', 'repo', 'categories']) {
+        let i = 0;
+        while ((i = js.indexOf(needle, i)) !== -1 && snippets.length < 40) {
+          snippets.push(js.slice(Math.max(0, i - 500), Math.min(js.length, i + 1200)));
+          i += needle.length;
+        }
+      }
+      out.script = { status: jsResp.status, jsUrl, apiMatches, urlMatches: urlMatches.slice(0, 50), snippets };
+    }
   } catch (error) {
-    out.market = { error: String(error) };
-  }
-
-  try {
-    const r = await fetch(`https://audit-engine.oathe.ai/api/audit/${AUDIT_ID}`, {
-      headers: { accept: 'application/json', 'user-agent': 'SignalLabAuditVerifier/1.0' },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(15000),
-    });
-    out.oathe = { status: r.status, body: (await r.text()).slice(0, 30000) };
-  } catch (error) {
-    out.oathe = { error: String(error) };
+    out.error = String(error);
   }
 
   res.setHeader('Cache-Control', 'no-store');
