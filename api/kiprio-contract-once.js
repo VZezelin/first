@@ -24,7 +24,7 @@ function formsFrom(html) {
 
 function submitScript(html) {
   const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
-  return scripts.find(s => /submitMcp\s*\(/.test(s)) || null;
+  return scripts.find(s => /function\s+submitMcp\s*\(/.test(s)) || null;
 }
 
 export default async function handler(req, res) {
@@ -37,28 +37,21 @@ export default async function handler(req, res) {
   const inlineSubmitScript = submitScript(html);
 
   if (req.query.mode !== 'submit') {
-    return res.status(200).json({ ok: true, upstreamStatus: upstream.status, url: upstream.url, forms: likely.length ? likely : forms, inlineSubmitScript: inlineSubmitScript?.slice(0, 8000) || null, scriptSrcs: [...html.matchAll(/<script\b[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m => m[1]).slice(-20) });
+    return res.status(200).json({ ok: true, upstreamStatus: upstream.status, url: upstream.url, forms: likely.length ? likely : forms, inlineSubmitScript: inlineSubmitScript?.slice(0, 8000) || null });
   }
 
   if (req.query.confirm !== CONFIRM) return res.status(400).json({ ok: false, error: 'CONFIRM_REQUIRED' });
-  if (!inlineSubmitScript) return res.status(409).json({ ok: false, error: 'SUBMIT_SCRIPT_NOT_FOUND' });
-  const endpointMatch = inlineSubmitScript.match(/fetch\(\s*["']([^"']+)["']/);
-  if (!endpointMatch) return res.status(409).json({ ok: false, error: 'FETCH_ENDPOINT_NOT_FOUND', script: inlineSubmitScript.slice(0, 8000) });
-  const endpoint = new URL(endpointMatch[1], upstream.url).toString();
-  if (new URL(endpoint).origin !== new URL(TARGET).origin) return res.status(409).json({ ok: false, error: 'CROSS_ORIGIN_ENDPOINT', endpoint });
-
-  const bodyShape = inlineSubmitScript.includes('github_url') ? { github_url: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' }
-    : inlineSubmitScript.includes('githubUrl') ? { githubUrl: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' }
-    : inlineSubmitScript.includes('url:') ? { url: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' }
-    : null;
-  if (!bodyShape) return res.status(409).json({ ok: false, error: 'BODY_SHAPE_UNCLEAR', script: inlineSubmitScript.slice(0, 8000) });
-
+  if (!inlineSubmitScript || !inlineSubmitScript.includes("fetch('https://kiprio.com/api/mcp-submit'")) {
+    return res.status(409).json({ ok: false, error: 'EXPECTED_SUBMIT_CONTRACT_NOT_FOUND' });
+  }
+  const endpoint = 'https://kiprio.com/api/mcp-submit';
+  const payload = { github_url: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' };
   const submitted = await fetch(endpoint, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'user-agent': 'SignalLab-AcquisitionVerifier/1.0', 'referer': upstream.url },
-    body: JSON.stringify(bodyShape),
+    body: JSON.stringify(payload),
     redirect: 'manual'
   });
   const text = await submitted.text();
-  return res.status(200).json({ ok: true, submitted: true, endpoint, payloadKeys: Object.keys(bodyShape), upstreamStatus: submitted.status, location: submitted.headers.get('location'), bodyPrefix: text.slice(0, 3000) });
+  return res.status(200).json({ ok: true, submitted: true, endpoint, upstreamStatus: submitted.status, location: submitted.headers.get('location'), bodyPrefix: text.slice(0, 3000) });
 }
