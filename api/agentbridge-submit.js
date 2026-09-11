@@ -1,5 +1,5 @@
 const SUBMIT_URL = 'https://agentbridge.cc/api/submit';
-const MANIFEST_URL = 'https://first-livid-omega.vercel.app/.well-known/agentbridge.json';
+const MANIFEST_URL = 'https://first-livid-omega.vercel.app/api/agentbridge-manifest';
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
