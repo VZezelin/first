@@ -1,19 +1,25 @@
 module.exports = async function handler(req, res) {
-  if (req.method !== 'GET' || req.query.confirm !== 'skillscat-check-v1') {
+  if (req.method !== 'GET' || req.query.confirm !== 'skillscat-feed-v1') {
     return res.status(400).json({ ok: false, error: 'CONFIRM_REQUIRED' });
   }
   try {
-    const queries = ['VZezelin', 'signal-lab-apify-tools', 'Signal Lab'];
+    const urls = ['https://skills.cat/marketplace.json', 'https://skills.cat/.well-known/clawhub.json'];
     const results = [];
-    for (const q of queries) {
-      const response = await fetch(`https://skills.cat/api/search?q=${encodeURIComponent(q)}&limit=20`, {
+    for (const url of urls) {
+      const response = await fetch(url, {
         headers: { 'user-agent': 'SignalLabSkillsCatCheck/1.0' },
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(20000),
       });
       const text = await response.text();
-      let body = text;
-      try { body = JSON.parse(text); } catch {}
-      results.push({ q, status: response.status, body });
+      const lower = text.toLowerCase();
+      const needles = ['vzezelin', 'signal-lab-apify-tools', 'vzezelin/first'];
+      results.push({
+        url,
+        status: response.status,
+        size: text.length,
+        matches: Object.fromEntries(needles.map((n) => [n, lower.includes(n)])),
+        contentType: response.headers.get('content-type'),
+      });
     }
     return res.status(200).json({ ok: true, results });
   } catch (error) {
