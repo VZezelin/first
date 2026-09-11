@@ -22,6 +22,11 @@ function formsFrom(html) {
   });
 }
 
+function submitScript(html) {
+  const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
+  return scripts.find(s => /submitMcp\s*\(/.test(s)) || null;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
@@ -29,40 +34,31 @@ export default async function handler(req, res) {
   const html = await upstream.text();
   const forms = formsFrom(html);
   const likely = forms.filter(f => JSON.stringify(f).toLowerCase().includes('github') || JSON.stringify(f).toLowerCase().includes('mcp'));
+  const inlineSubmitScript = submitScript(html);
 
   if (req.query.mode !== 'submit') {
-    return res.status(200).json({ ok: true, upstreamStatus: upstream.status, url: upstream.url, forms: likely.length ? likely : forms, scriptSrcs: [...html.matchAll(/<script\b[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m => m[1]).slice(-20) });
+    return res.status(200).json({ ok: true, upstreamStatus: upstream.status, url: upstream.url, forms: likely.length ? likely : forms, inlineSubmitScript: inlineSubmitScript?.slice(0, 8000) || null, scriptSrcs: [...html.matchAll(/<script\b[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m => m[1]).slice(-20) });
   }
 
   if (req.query.confirm !== CONFIRM) return res.status(400).json({ ok: false, error: 'CONFIRM_REQUIRED' });
-  const form = (likely.length ? likely : forms)[0];
-  if (!form) return res.status(409).json({ ok: false, error: 'NO_FORM_FOUND' });
-  const method = String(form.attrs.method || 'GET').toUpperCase();
-  const actionRaw = String(form.attrs.action || '');
-  if (method !== 'POST' || !actionRaw) return res.status(409).json({ ok: false, error: 'NO_SAFE_POST_CONTRACT', form });
-  const action = new URL(actionRaw, upstream.url).toString();
-  if (new URL(action).origin !== new URL(TARGET).origin) return res.status(409).json({ ok: false, error: 'CROSS_ORIGIN_FORM', action });
+  if (!inlineSubmitScript) return res.status(409).json({ ok: false, error: 'SUBMIT_SCRIPT_NOT_FOUND' });
+  const endpointMatch = inlineSubmitScript.match(/fetch\(\s*["']([^"']+)["']/);
+  if (!endpointMatch) return res.status(409).json({ ok: false, error: 'FETCH_ENDPOINT_NOT_FOUND', script: inlineSubmitScript.slice(0, 8000) });
+  const endpoint = new URL(endpointMatch[1], upstream.url).toString();
+  if (new URL(endpoint).origin !== new URL(TARGET).origin) return res.status(409).json({ ok: false, error: 'CROSS_ORIGIN_ENDPOINT', endpoint });
 
-  const body = new URLSearchParams();
-  for (const input of form.inputs) {
-    const name = typeof input.name === 'string' ? input.name : '';
-    if (!name) continue;
-    const type = String(input.type || 'text').toLowerCase();
-    if (type === 'hidden' && typeof input.value === 'string') body.set(name, input.value);
-  }
-  const names = form.inputs.map(i => typeof i.name === 'string' ? i.name : '').filter(Boolean);
-  const repoName = names.find(n => /github|repo/i.test(n)) || names.find(n => /url/i.test(n));
-  const contactName = names.find(n => /contact|name/i.test(n));
-  if (!repoName) return res.status(409).json({ ok: false, error: 'REPO_FIELD_NOT_FOUND', names, form });
-  body.set(repoName, 'https://github.com/VZezelin/first');
-  if (contactName) body.set(contactName, 'Signal Lab');
+  const bodyShape = inlineSubmitScript.includes('github_url') ? { github_url: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' }
+    : inlineSubmitScript.includes('githubUrl') ? { githubUrl: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' }
+    : inlineSubmitScript.includes('url:') ? { url: 'https://github.com/VZezelin/first', submitter: 'Signal Lab' }
+    : null;
+  if (!bodyShape) return res.status(409).json({ ok: false, error: 'BODY_SHAPE_UNCLEAR', script: inlineSubmitScript.slice(0, 8000) });
 
-  const submitted = await fetch(action, {
+  const submitted = await fetch(endpoint, {
     method: 'POST',
-    headers: { 'content-type': 'application/x-www-form-urlencoded', 'user-agent': 'SignalLab-AcquisitionVerifier/1.0', 'referer': upstream.url },
-    body: body.toString(),
+    headers: { 'content-type': 'application/json', 'user-agent': 'SignalLab-AcquisitionVerifier/1.0', 'referer': upstream.url },
+    body: JSON.stringify(bodyShape),
     redirect: 'manual'
   });
   const text = await submitted.text();
-  return res.status(200).json({ ok: true, submitted: true, action, fields: [...body.keys()], upstreamStatus: submitted.status, location: submitted.headers.get('location'), bodyPrefix: text.slice(0, 3000) });
+  return res.status(200).json({ ok: true, submitted: true, endpoint, payloadKeys: Object.keys(bodyShape), upstreamStatus: submitted.status, location: submitted.headers.get('location'), bodyPrefix: text.slice(0, 3000) });
 }
