@@ -1,26 +1,28 @@
+const ENDPOINT = 'https://mcp.apify.com?tools=signal_lab/amazon-price-tracker,signal_lab/google-autocomplete-keywords,signal_lab/website-to-markdown-crawler,signal_lab/youtube-transcript-scraper,signal_lab/reddit-search-comments,signal_lab/job-vacancy-scraper,signal_lab/restaurant-menu-extractor';
+
 module.exports = async function handler(req, res) {
-  if (req.method !== 'GET') {
-    res.setHeader('Allow', 'GET');
-    return res.status(405).json({ ok: false, error: 'METHOD_NOT_ALLOWED' });
+  if (req.method !== 'GET' || req.query.confirm !== 'mcplookup-v1') {
+    return res.status(400).json({ ok: false, error: 'CONFIRM_REQUIRED' });
   }
   try {
-    const response = await fetch('https://mcplookup.com/_next/static/immutable/chunks/261ro-65iq4wy.js', {
-      method: 'GET',
-      headers: { 'user-agent': 'SignalLabSubmissionProbe/1.0' },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(15000),
+    const response = await fetch('https://mcplookup.com/api/submit', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'user-agent': 'SignalLabSubmissionRelay/1.0',
+      },
+      body: JSON.stringify({
+        url: ENDPOINT,
+        website_url: 'https://first-livid-omega.vercel.app',
+        documentation_url: 'https://first-livid-omega.vercel.app/mcp.json',
+      }),
+      redirect: 'manual',
+      signal: AbortSignal.timeout(25000),
     });
     const text = await response.text();
-    const needles = ['submit','api/','website_url','documentation_url','fetch('];
-    const excerpts = [];
-    for (const needle of needles) {
-      let at = 0;
-      while ((at = text.indexOf(needle, at)) !== -1 && excerpts.length < 50) {
-        excerpts.push(text.slice(Math.max(0, at - 500), Math.min(text.length, at + 1200)));
-        at += needle.length;
-      }
-    }
-    return res.status(200).json({ ok: true, upstreamStatus: response.status, size: text.length, excerpts });
+    let body = text;
+    try { body = JSON.parse(text); } catch {}
+    return res.status(200).json({ ok: response.ok, upstreamStatus: response.status, body });
   } catch (error) {
     return res.status(502).json({ ok: false, error: error instanceof Error ? error.message : String(error) });
   }
