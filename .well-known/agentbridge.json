@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "name": "signal-lab-apify-tools",
+  "description": "Signal Lab developer-first Apify data APIs. Convert public websites to clean Markdown for RAG/LLM workflows through a production Apify Actor, using the caller's own Apify account and token.",
+  "version": "1.0.0",
+  "contact_url": "https://first-livid-omega.vercel.app",
+  "auth": {
+    "type": "bearer",
+    "instructions": "Use your own Apify API token. Calls run on your Apify account and may incur the Actor's current Store pricing; review the live Pricing tab before running."
+  },
+  "base_url": "https://api.apify.com/v2",
+  "actions": [
+    {
+      "id": "crawl_website_to_markdown",
+      "description": "Crawl a public website and convert successful pages to clean Markdown plus source metadata for RAG, LLM ingestion, semantic search, or content analysis. This starts a paid Apify Actor run, so confirm before executing.",
+      "method": "POST",
+      "path": "/acts/signal_lab~website-to-markdown-crawler/runs",
+      "confirm": true,
+      "parameters": [
+        {
+          "name": "startUrls",
+          "description": "Start URLs as an array of request objects, for example [{\"url\":\"https://example.com\"}]. Public HTTP(S) pages only.",
+          "in": "body",
+          "required": true,
+          "type": "array"
+        },
+        {
+          "name": "maxPages",
+          "description": "Maximum number of successful Markdown pages to emit.",
+          "in": "body",
+          "required": false,
+          "type": "integer",
+          "default": 10
+        },
+        {
+          "name": "maxDepth",
+          "description": "Maximum same-domain link depth from each start URL.",
+          "in": "body",
+          "required": false,
+          "type": "integer",
+          "default": 1
+        },
+        {
+          "name": "sameDomainOnly",
+          "description": "Follow links only on the same domain as the supplied start URLs.",
+          "in": "body",
+          "required": false,
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "useSitemaps",
+          "description": "Discover crawl candidates from declared or conventional sitemaps.",
+          "in": "body",
+          "required": false,
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "respectRobotsTxt",
+          "description": "Respect robots.txt disallow rules for the wildcard user agent.",
+          "in": "body",
+          "required": false,
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "waitForFinish",
+          "description": "Wait up to this many seconds for the Actor run to finish before the API returns run metadata.",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "default": 60
+        }
+      ]
+    }
+  ]
+}
