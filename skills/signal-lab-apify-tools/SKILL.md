@@ -2,6 +2,9 @@
 name: signal-lab-apify-tools
 version: 1.0.1
 description: Use Signal Lab's focused Apify data APIs or Official MCP tools for public YouTube captions, website-to-Markdown RAG ingestion, known job-posting extraction, Amazon price tracking, Google Autocomplete research, Reddit research, and restaurant menu extraction. Use when an agent needs one of these public-data workflows and should choose a bounded, truthful Apify or MCP path instead of inventing scraping capabilities.
+allowed-tools:
+  - WebSearch
+  - Read
 license: MIT
 tags:
   - apify
