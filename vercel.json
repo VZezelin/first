@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/skill.js": {
+      "includeFiles": "skills/**/SKILL.md"
+    }
+  },
   "rewrites": [
     {
       "source": "/.well-known/agent-skills/index.json",
