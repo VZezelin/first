@@ -5,14 +5,14 @@
       "name": "signal-lab-apify-tools",
       "type": "skill-md",
       "description": "Route bounded public-data work through Signal Lab's focused Apify Actors and hosted MCP tools.",
-      "url": "https://raw.githubusercontent.com/VZezelin/first/main/skills/signal-lab-apify-tools/SKILL.md",
+      "url": "https://first-livid-omega.vercel.app/.well-known/agent-skills/signal-lab-apify-tools/SKILL.md",
       "digest": "sha256:ebf04f21da5decc810ec07c826837efcc6e67c70e273baec7b38b60a54279f14"
     },
     {
       "name": "youtube-transcript-api",
       "type": "skill-md",
       "description": "Use the Signal Lab YouTube Transcript API for available public captions, timestamps, Python, RAG, and LangChain workflows.",
-      "url": "https://raw.githubusercontent.com/VZezelin/first/main/skills/youtube-transcript-api/SKILL.md",
+      "url": "https://first-livid-omega.vercel.app/.well-known/agent-skills/youtube-transcript-api/SKILL.md",
       "digest": "sha256:7d26524ca9d828a2c8b5f4397290b6e88482d9f17086e035f24c6dd4769c44db"
     }
   ]
